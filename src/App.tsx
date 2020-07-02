@@ -1,5 +1,5 @@
 import React from 'react';
-import GDriveAuth from './auth/gdrive/gdrive';
+import GDriveAuth from './auth/google-drive/gdrive';
 
 function App() {
   return (
