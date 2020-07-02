@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { GoogleLogin } from 'react-google-login';
+import DirSelectorView from '../../lib/dir-selector';
 
 class GDriveAuth extends React.Component {
     public componentDidMount(){
@@ -23,7 +24,6 @@ class GDriveAuth extends React.Component {
                     onFailure={(res) => { this.onResponse(res, 'error')}}
                     buttonText="Google Drive"
                     isSignedIn={true}
-                    
                 />
                 <br/>
             </div>
