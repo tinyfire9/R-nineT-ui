@@ -10,6 +10,12 @@ export interface DirectoryGraph {
     subdirectory?: DirectoryGraph[];
 }
 
+export interface SubDirectory {
+    name: string;
+    path: string;
+    type: GraphNodeType;
+}
+
 export interface DriveState {
     directory_graph: DirectoryGraph;
     drive_name: Drive;
