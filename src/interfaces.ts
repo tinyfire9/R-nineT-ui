@@ -1,23 +1,20 @@
 
 export type Drive = 'GoogleDrive' | 'OneDrive' | 'BoxDrive' | 'DropboxDrive' | 'AmazonDrive';
 
-export type GraphNodeType = 'File' | 'Directory';
+export type DirectoryType = 'File' | 'Directory';
 
-export interface DirectoryGraph {
-    directory_name: string;
-    path: string;
-    type: GraphNodeType;
-    subdirectory?: DirectoryGraph[];
-}
-
-export interface SubDirectory {
+export interface DirectoryBase {
     name: string;
-    path: string;
-    type: GraphNodeType;
+    type: DirectoryType;
 }
+
+export interface GDriveDirectory extends DirectoryBase {
+    id: string;
+}
+
+export type DriveDirectory = DirectoryBase | GDriveDirectory;
 
 export interface DriveState {
-    directory_graph: DirectoryGraph;
     drive_name: Drive;
     active: boolean;
     window: 'left' | 'right' | 'none';
