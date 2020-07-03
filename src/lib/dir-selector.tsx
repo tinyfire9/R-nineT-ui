@@ -1,9 +1,9 @@
 import React from 'react';
-import { SubDirectory } from '../interfaces';
+import { DriveDirectory, DirectoryType } from '../interfaces';
 
 interface DirSelectorViewProps {
-    subdirectory: SubDirectory[];
-    listSubDir(path: string, name: string): any;
+    subdirectory: DriveDirectory[];
+    listGDriveSubDir(id: string, name: string, type: DirectoryType): any;
     transferDirectories(dirs: string[]): any;
 }
 
@@ -14,7 +14,7 @@ interface DirSelectorViewState {
 class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorViewState>{
     public static defaultProps = {
         subdirectory: [],
-        listSubDir: () => {},
+        listGDriveSubDir: () => {},
         transferDirectories: () => {}
     };
 
@@ -47,26 +47,31 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
         let { selected_subdirectories } = this.state;
 
         return this.props.subdirectory
-            .map(({ name, path, type }: SubDirectory) => {
+            .map(({ name, id, type }: any) => {
                 return (
                     <tr>
                         <td>
                             <input 
                                 type="checkbox"
-                                checked={selected_subdirectories[`${path}/${name}`]}
-                                onClick={() => this.onSelectedSubDirListUpdate(`${path}/${name}`)}
+                                checked={selected_subdirectories[`${id}`]}
+                                onClick={() => this.onSelectedSubDirListUpdate(`${id}`)}
                             />
                         </td>
                         <td>
-                            <div
-                                onDoubleClick={() => {
+                            <a
+                                style={
+                                    {
+                                        color: (type == 'Directory') ? 'blue': '',
+                                        borderBottom: (type == 'Directory') ? '1px solid blue': ''}
+                                }
+                                onClick={() => {
                                     if(type == 'Directory') {
-                                        this.props.listSubDir(path, name);
+                                        this.props.listGDriveSubDir(id, name, type);
                                     }
                                 }}
                             >
                                 { name }
-                            </div>
+                            </a>
                         </td>
                         <td>-</td>
                         <td>{type}</td>
@@ -84,10 +89,10 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 <table className="drive-dir-selector-table" style={{border: 'black'}}>
                     <thead>
                         <tr>
+                            <td></td>
                             <td>File Name</td>
                             <td>File Type</td>
                             <td>File Size</td>
-                            <td>Last Modified</td>
                         </tr>
                     </thead>
                     <tbody>
