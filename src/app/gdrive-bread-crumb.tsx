@@ -18,31 +18,28 @@ class GDriveBreadCrumb extends React.Component<GDriveBreadCrumbProps, any> {
         fetchSubDirectory() {}
     }
     public render() {
-        console.log(this.props.breadcrumbItems)
+        let breadcrumbItems = this.props.breadcrumbItems.map(
+            ({ name, id, type }: BreadCrumbItem, i: number) => {
+                return (
+                    <span key={id}>
+                        <a
+                            style={
+                                {
+                                    color: (type == 'Directory') ? 'blue': '',
+                                    borderBottom: (type == 'Directory') ? '1px solid blue': ''}
+                            }
+                            onClick={() => this.props.fetchSubDirectory(id)} >{name}
+                        </a>
+                        <span>/</span> 
+                    </span>
+                );
+            }
+        );
 
-        let { breadcrumbItems } = this.props;
+        breadcrumbItems.pop();
+
         return (
-            <div>
-                {
-                    this.props.breadcrumbItems.map(
-                        ({ name, id, type }: BreadCrumbItem, i: number) => {
-                            return (
-                                <React.Fragment>
-                                    <a
-                                        style={
-                                            {
-                                                color: (type == 'Directory') ? 'blue': '',
-                                                borderBottom: (type == 'Directory') ? '1px solid blue': ''}
-                                        }
-                                        onClick={() => this.props.fetchSubDirectory(id)} >{name}
-                                    </a>
-                                    <span>/</span> 
-                                </React.Fragment>
-                            );
-                        }
-                    )
-                }
-            </div>
+            <div>{ breadcrumbItems }</div>
         );
     }
 }
