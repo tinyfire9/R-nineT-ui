@@ -2,17 +2,21 @@ import React from 'react';
 import { DriveDirectory, DirectoryType } from '../interfaces';
 
 interface DirSelectorViewProps {
+    currentDirId: string;
     subdirectory: DriveDirectory[];
     listGDriveSubDir(id: string, name: string, type: DirectoryType): any;
     transferDirectories(dirs: string[]): any;
+    fetchNextPage(): any;
 }
 
 interface DirSelectorViewState {
     selected_subdirectories: { [key:string]: boolean };
+    select_all_active: boolean;
 }
 
 class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorViewState>{
     public static defaultProps = {
+        currentDirId: '',
         subdirectory: [],
         listGDriveSubDir: () => {},
         transferDirectories: () => {}
@@ -20,17 +24,44 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
 
     constructor(props: DirSelectorViewProps) {
         super(props);
-
         this.state = {
+            select_all_active: false,
             selected_subdirectories: {}
         };
     }
 
-    public onSelectedSubDirListUpdate(path: string) {
+    public componentWillReceiveProps(newProps: DirSelectorViewProps) {
+        if(this.props.currentDirId != newProps.currentDirId) {
+            this.setState({
+                select_all_active: false,
+                selected_subdirectories: {}
+            })
+        }
+    }
+
+    public toggleSelectAll() {
+        if(this.state.select_all_active) {
+            this.setState({
+                select_all_active: false,
+                selected_subdirectories: {},
+            });
+        }  else {
+            let selected_subdirectories: any = {};
+            this.props.subdirectory.forEach(({ id }: any) => {
+                selected_subdirectories[`${id}`] = true;
+            })
+            this.setState({
+                select_all_active: true,
+                selected_subdirectories, 
+            });
+        }
+    }
+
+    public onSelectedSubDirListUpdate(id: string) {
         const { selected_subdirectories } = this.state;
 
         let newState: DirSelectorViewState = { ...this.state };
-        newState.selected_subdirectories[path] = !selected_subdirectories[path] ? true : false;
+        newState.selected_subdirectories[id] = !selected_subdirectories[id] ? true : false;
         this.setState(newState);
     }
 
@@ -49,7 +80,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
         return this.props.subdirectory
             .map(({ name, id, type }: any) => {
                 return (
-                    <tr>
+                    <tr key={id}>
                         <td>
                             <input 
                                 type="checkbox"
@@ -86,22 +117,29 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
 
         return (
             <React.Fragment>
+                <button onClick={() => this.props.transferDirectories(selected_subdirectories)}>
+                    Transfer {selected_subdirectories.length} items >  
+                </button>
                 <table className="drive-dir-selector-table" style={{border: 'black'}}>
                     <thead>
                         <tr>
-                            <td></td>
+                            <td>
+                                <input 
+                                    type="checkbox"
+                                    checked={this.state.select_all_active}
+                                    onClick={() => this.toggleSelectAll()}
+                                />
+                            </td>
                             <td>File Name</td>
                             <td>File Type</td>
-                            <td>File Size</td>
                         </tr>
                     </thead>
                     <tbody>
                         { this.makeTableRows() }
                     </tbody>
                 </table>
-                <button onClick={() => this.props.transferDirectories(selected_subdirectories)}>
-                    Transfer {selected_subdirectories.length} items >  
-                </button>
+                {this.props.currentDirId ? <button onClick={() => this.props.fetchNextPage()}>Load more ⬇️ </button> : ''}
+                <br/>
             </React.Fragment>
         );
     }
