@@ -1,5 +1,5 @@
 import React from 'react';
-import API from '../service/google-drive/api'
+import API from '../service/gdrive/api'
 import DirSelectorView from '../lib/dir-selector';
 import GDriveBreadCrumb from './gdrive-bread-crumb';
 import { DirectoryType } from '../interfaces';
@@ -12,6 +12,7 @@ class GDrive extends React.Component<any, any> {
     super(props);
 
     this.state = {
+      currentDirId: '',
       token,
       nextPageToken: '',
       subDir: [],
@@ -20,30 +21,27 @@ class GDrive extends React.Component<any, any> {
   }
 
   public makeRootDirBreadCrumb = () => ({
-    id: '_DRIVE_ROOT_DIR',
+    id: 'root',
     name: 'Drive',
     type: 'Directory',
   });
 
-  public fetchSubDirectory () {
-    api.fetchSubDirectory(this.state.token)
-      .then((res: any) => {
-        this.setState({ nextPageToken: res.nextPageToken, subDir: res.files, breadcrumbItems: [] })
-      }, (err) => console.log(err))
-  }
-
   public updateBreadCrumb(id: string) {
     let breadcrumbItems = [...this.state.breadcrumbItems];
-    let i = breadcrumbItems.indexOf((item: any) => item.id == id);
+    let i = breadcrumbItems.findIndex((item: any) => item.id == id);
+
     for(let k = breadcrumbItems.length -1 ; k > i ; k--) {
       breadcrumbItems.pop();
     }
+
+    return breadcrumbItems;
   }
 
-  public fetchSubDirectoryFromBreadCrumb(dir_id: string) {
-    api.fetchSubDirectory(this.state.token, dir_id == '_DRIVE_ROOT_DIR' ? '' : dir_id)
+  public fetchSubDirectory(dir_id: string) {
+    api.fetchSubDirectory(this.state.token, dir_id)
       .then((res: any) => {
         this.setState({
+          currentDirId: dir_id,
           subDir: res.files,
           nextPageToken: res.nextPageToken,
           breadcrumbItems: this.updateBreadCrumb(dir_id),
@@ -62,11 +60,30 @@ class GDrive extends React.Component<any, any> {
           type,
         });
         this.setState({
+          currentDirId: id,
           subDir: res.files,
           nextPageToken: res.nextPageToken,
           breadcrumbItems,
         })
       })
+  }
+
+  public fetchNextPage() {
+    const { nextPageToken, currentDirId } = this.state;
+
+    if(!nextPageToken) {
+      return;
+    }
+
+    api.fetchSubDirectory(token, currentDirId, nextPageToken)
+      .then((res: any) => {
+        let subDir = [...this.state.subDir, ... res.files];
+        this.setState({
+          subDir,
+          nextPageToken: res.nextPageToken,
+        })
+      });
+
   }
 
   public render() {
@@ -76,19 +93,23 @@ class GDrive extends React.Component<any, any> {
       <div className="App">
         <header className="App-header">
           <div style={{ textAlign: "center" }}>
-            <button onClick={() => { this.fetchSubDirectory()}}>Fetch Dir</button>
+            <button onClick={() => { this.fetchSubDirectory('root')}}>Fetch Dir</button>
             {
-              this.state.subDir.length > 0 ? 
-                <React.Fragment>
-                  <GDriveBreadCrumb
-                    breadcrumbItems={this.state.breadcrumbItems}
-                    fetchSubDirectory={(id: string) => this.fetchSubDirectoryFromBreadCrumb(id)}
-                  />
-                  <DirSelectorView subdirectory={this.state.subDir} listGDriveSubDir={
+              <React.Fragment>
+                <GDriveBreadCrumb
+                  breadcrumbItems={this.state.breadcrumbItems}
+                  fetchSubDirectory={(id: string) => this.fetchSubDirectory(id)}
+                />
+                <DirSelectorView
+                  currentDirId={this.state.currentDirId}
+                  subdirectory={this.state.subDir} 
+                  listGDriveSubDir={
                     (id: string, name: string, type: DirectoryType) => this.fetchSubDirectoryFromCurrentDirectory(id, name, type)
-                  } /> 
-                </React.Fragment>:
-                ''
+                  }
+                  transferDirectories={(dirs: string[]) => {console.log({transferDirs: dirs})}}
+                  fetchNextPage={() => this.fetchNextPage()}
+                /> 
+              </React.Fragment>
             }
             
           </div>
