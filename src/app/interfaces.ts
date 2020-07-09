@@ -1,5 +1,5 @@
 
-import { DRIVE } from '../app.config';
+import { DRIVE } from '../app-components';
 
 export enum WINDOW {
     LEFT = 'left',
