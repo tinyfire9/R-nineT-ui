@@ -1,10 +1,10 @@
 import React from 'react';
-import { DriveDirectory, DirectoryType } from '../interfaces';
+import { DriveDirectory, DIRECTORY_TYPE } from '../interfaces';
 
 interface DirSelectorViewProps {
     currentDirId: string;
     subdirectory: DriveDirectory[];
-    listGDriveSubDir(id: string, name: string, type: DirectoryType): any;
+    listGDriveSubDir(id: string, name: string, type: DIRECTORY_TYPE): any;
     transferDirectories(dirs: string[]): any;
     fetchNextPage(): any;
 }
@@ -92,11 +92,11 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                             <a
                                 style={
                                     {
-                                        color: (type == 'Directory') ? 'blue': '',
-                                        borderBottom: (type == 'Directory') ? '1px solid blue': ''}
+                                        color: (type == DIRECTORY_TYPE.DIRECTORY) ? 'blue': '',
+                                        borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''}
                                 }
                                 onClick={() => {
-                                    if(type == 'Directory') {
+                                    if(type == DIRECTORY_TYPE.DIRECTORY) {
                                         this.props.listGDriveSubDir(id, name, type);
                                     }
                                 }}
@@ -104,9 +104,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                                 { name }
                             </a>
                         </td>
-                        <td>-</td>
                         <td>{type}</td>
-                        <td>-</td>
                     </tr>
                 );
             });

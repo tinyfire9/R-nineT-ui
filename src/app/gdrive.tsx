@@ -2,7 +2,7 @@ import React from 'react';
 import API from '../service/gdrive/api'
 import DirSelectorView from '../lib/dir-selector';
 import GDriveBreadCrumb from './gdrive-bread-crumb';
-import { DirectoryType } from '../interfaces';
+import { DIRECTORY_TYPE } from '../interfaces';
 
 let token = "";
 let api = new API();
@@ -23,7 +23,7 @@ class GDrive extends React.Component<any, any> {
   public makeRootDirBreadCrumb = () => ({
     id: 'root',
     name: 'Drive',
-    type: 'Directory',
+    type: DIRECTORY_TYPE.DIRECTORY,
   });
 
   public updateBreadCrumb(id: string) {
@@ -49,7 +49,7 @@ class GDrive extends React.Component<any, any> {
       });
   }
 
-  public fetchSubDirectoryFromCurrentDirectory(id: string, name: string, type: DirectoryType) {
+  public fetchSubDirectoryFromCurrentDirectory(id: string, name: string, type: DIRECTORY_TYPE) {
     let breadcrumbItems = [...this.state.breadcrumbItems];
     api.fetchSubDirectory(this.state.token, id)
       .then((res: any) => {
@@ -104,7 +104,7 @@ class GDrive extends React.Component<any, any> {
                   currentDirId={this.state.currentDirId}
                   subdirectory={this.state.subDir} 
                   listGDriveSubDir={
-                    (id: string, name: string, type: DirectoryType) => this.fetchSubDirectoryFromCurrentDirectory(id, name, type)
+                    (id: string, name: string, type: DIRECTORY_TYPE) => this.fetchSubDirectoryFromCurrentDirectory(id, name, type)
                   }
                   transferDirectories={(dirs: string[]) => {console.log({transferDirs: dirs})}}
                   fetchNextPage={() => this.fetchNextPage()}

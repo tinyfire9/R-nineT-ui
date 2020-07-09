@@ -1,4 +1,4 @@
-import { API } from '../interfces';
+import { DIRECTORY_TYPE } from '../../interfaces';
 import { GDriveDirectory } from '../../interfaces';
 
 interface GDriveResponse {
@@ -30,7 +30,7 @@ class GDriveAPI {
                     let subDir: GDriveDirectory[] = res.files.map(({ name, id, mimeType }: any) => ({
                         name,
                         id,
-                        type: mimeType.includes('folder') ? 'Directory' : 'File',
+                        type: mimeType.includes('folder') ? DIRECTORY_TYPE.DIRECTORY : DIRECTORY_TYPE.FILE,
                     }));
 
                     resolve({ nextPageToken: res.nextPageToken, files: subDir });

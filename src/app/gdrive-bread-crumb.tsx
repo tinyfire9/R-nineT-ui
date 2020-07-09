@@ -1,10 +1,10 @@
 import React from 'react';
-import { DirectoryType } from '../interfaces';
+import { DIRECTORY_TYPE } from '../interfaces';
 
 interface BreadCrumbItem {
     id: string;
     name: string;
-    type: DirectoryType;
+    type: DIRECTORY_TYPE;
 }
 
 interface GDriveBreadCrumbProps {
@@ -25,8 +25,8 @@ class GDriveBreadCrumb extends React.Component<GDriveBreadCrumbProps, any> {
                         <a
                             style={
                                 {
-                                    color: (type == 'Directory') ? 'blue': '',
-                                    borderBottom: (type == 'Directory') ? '1px solid blue': ''}
+                                    color: (type == DIRECTORY_TYPE.DIRECTORY) ? 'blue': '',
+                                    borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''}
                             }
                             onClick={() => this.props.fetchSubDirectory(id)} >{name}
                         </a>
