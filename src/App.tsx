@@ -1,6 +1,5 @@
 import React from 'react';
-import GDriveApp from '../src/app/gdrive';
-import GDriveAuth from './auth/gdrive/gdrive';
+import App from '../src/app/app';
 
 class GDrive extends React.Component<any, any> {
 
@@ -10,8 +9,7 @@ class GDrive extends React.Component<any, any> {
         <header className="App-header">
           <div style={{ textAlign: "center" }}>
             <h1>Drive App</h1>
-            <GDriveAuth />
-            <GDriveApp />
+            <App />
           </div>
         </header>
       </div>
@@ -20,4 +18,3 @@ class GDrive extends React.Component<any, any> {
 }
 
 export default GDrive;
-
