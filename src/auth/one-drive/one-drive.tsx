@@ -1,7 +1,7 @@
 import React from 'react';
 import MSLogin from 'react-microsoft-login'
 import { AuthData } from '../../app/interfaces';
-import { DRIVE } from '../../drive-components';
+import { DRIVE } from '../../constants';
 
 interface OneDriveProps {
     onAuthSuccess:(drive: DRIVE, authData: AuthData) => any;
