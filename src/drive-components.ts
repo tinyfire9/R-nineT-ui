@@ -1,18 +1,14 @@
 import { GDrive, OneDrive } from './app/index';
 import { GDriveAuth, OneDriveAuth } from './auth';
+import { DRIVE } from './constants'
 
-export const enum DRIVE  {
-    'GOOGLE_DRIVE'= 'google_drive',
-    'ONE_DRIVE' = 'one_drive',
-}
-
-interface DriveConfig {
+interface DriveComponents {
     drive: DRIVE;
     authComponent: any;
     dirSelectorComponent: any;
 }
 
-export const APP_COMPONENTS: DriveConfig[] = [
+export const DRIVE_COMPONENTS: DriveComponents[] = [
     {
         drive: DRIVE.GOOGLE_DRIVE,
         authComponent: GDriveAuth,
