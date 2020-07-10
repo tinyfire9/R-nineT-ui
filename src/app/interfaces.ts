@@ -1,5 +1,5 @@
 
-import { DRIVE } from '../app-components';
+import { DRIVE } from '../constants';
 
 export enum WINDOW {
     LEFT = 'left',
@@ -7,23 +7,25 @@ export enum WINDOW {
     NONE = 'none'
 }
 
+export interface AuthData {
+    token: string;
+    name: string;
+    image_url: string;
+    email: string;
+    expiration_time: number;
+};
+
 export interface DriveState {
     drive: DRIVE;
     active: boolean;
     window: WINDOW;
-    session: {
-        token: string;
-        active: boolean;
-        name: string;
-        image_url: string;
-        email: string;
-        expiration_time: number;
-    },
+    authData: AuthData,
     active_path: string;
     selected_items: string[];
 }
 
 export interface TransferSession {
+    id: string;
     name: string;
     source_drive: DRIVE;
     destination_drive: DRIVE;
