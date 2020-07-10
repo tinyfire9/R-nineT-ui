@@ -1,12 +1,6 @@
 
 import { DRIVE } from '../constants';
 
-export enum WINDOW {
-    LEFT = 'left',
-    RIGHT = 'right',
-    NONE = 'none'
-}
-
 export interface AuthData {
     token: string;
     name: string;
@@ -17,11 +11,8 @@ export interface AuthData {
 
 export interface DriveState {
     drive: DRIVE;
-    active: boolean;
-    window: WINDOW;
     authData: AuthData,
-    active_path: string;
-    selected_items: string[];
+    current_directory: Object | any;
 }
 
 export interface TransferSession {
