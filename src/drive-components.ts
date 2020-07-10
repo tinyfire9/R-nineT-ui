@@ -3,20 +3,17 @@ import { GDriveAuth, OneDriveAuth } from './auth';
 import { DRIVE } from './constants'
 
 interface DriveComponents {
-    drive: DRIVE;
-    authComponent: any;
-    dirSelectorComponent: any;
+    authComponent:  typeof GDriveAuth | typeof OneDriveAuth;
+    dirSelectorComponent: typeof GDrive | typeof OneDrive;
 }
 
-export const DRIVE_COMPONENTS: DriveComponents[] = [
-    {
-        drive: DRIVE.GOOGLE_DRIVE,
+export const DRIVE_COMPONENTS: {[drive: string] : DriveComponents } = {
+    [DRIVE.GOOGLE_DRIVE] :{
         authComponent: GDriveAuth,
         dirSelectorComponent: GDrive,
     },
-    {
-        drive: DRIVE.ONE_DRIVE,
+    [DRIVE.ONE_DRIVE]: {
         authComponent: OneDriveAuth,
         dirSelectorComponent: OneDrive,
     }
-];
+};
