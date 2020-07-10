@@ -1,19 +1,29 @@
 import React from 'react';
 import API from '../service/gdrive/api'
 import DirSelectorView from '../lib/dir-selector';
-import GDriveBreadCrumb from './gdrive-bread-crumb';
-import { DIRECTORY_TYPE } from '../interfaces';
+import GDriveBreadCrumb, { BreadCrumbItem } from './gdrive-bread-crumb';
+import { DIRECTORY_TYPE, DRIVE } from '../constants';
+import { DriveDirectory } from '../interfaces';
 
-let token = "";
-let api = new API();
+interface GDriveProps {
+  token: string;
+  onTransferRequest(srcDrive: DRIVE, selectedItems: any): any;
+}
 
-class GDrive extends React.Component<any, any> {
+interface GDriveState {
+  currentDirId: string;
+  nextPageToken: string;
+  subDir: DriveDirectory[];
+  breadcrumbItems: BreadCrumbItem[];
+}
+
+class GDrive extends React.Component<GDriveProps, GDriveState> {
+  private api: API = new API();
   constructor(props: any) {
     super(props);
 
     this.state = {
       currentDirId: '',
-      token,
       nextPageToken: '',
       subDir: [],
       breadcrumbItems: [this.makeRootDirBreadCrumb()],
@@ -38,7 +48,7 @@ class GDrive extends React.Component<any, any> {
   }
 
   public fetchSubDirectory(dir_id: string) {
-    api.fetchSubDirectory(this.state.token, dir_id)
+    this.api.fetchSubDirectory(this.props.token, dir_id)
       .then((res: any) => {
         this.setState({
           currentDirId: dir_id,
@@ -51,7 +61,7 @@ class GDrive extends React.Component<any, any> {
 
   public fetchSubDirectoryFromCurrentDirectory(id: string, name: string, type: DIRECTORY_TYPE) {
     let breadcrumbItems = [...this.state.breadcrumbItems];
-    api.fetchSubDirectory(this.state.token, id)
+    this.api.fetchSubDirectory(this.props.token, id)
       .then((res: any) => {
         console.log({ res })
         breadcrumbItems.push({
@@ -75,7 +85,7 @@ class GDrive extends React.Component<any, any> {
       return;
     }
 
-    api.fetchSubDirectory(token, currentDirId, nextPageToken)
+    this.api.fetchSubDirectory(this.props.token, currentDirId, nextPageToken)
       .then((res: any) => {
         let subDir = [...this.state.subDir, ... res.files];
         this.setState({
@@ -106,7 +116,7 @@ class GDrive extends React.Component<any, any> {
                   listGDriveSubDir={
                     (id: string, name: string, type: DIRECTORY_TYPE) => this.fetchSubDirectoryFromCurrentDirectory(id, name, type)
                   }
-                  transferDirectories={(dirs: string[]) => {console.log({transferDirs: dirs})}}
+                  transferDirectories={(dirs: string[]) => this.props.onTransferRequest(DRIVE.GOOGLE_DRIVE, dirs)}
                   fetchNextPage={() => this.fetchNextPage()}
                 /> 
               </React.Fragment>
