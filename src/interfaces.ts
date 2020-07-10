@@ -1,7 +1,4 @@
-export enum DIRECTORY_TYPE {
-     'FILE' = 'file',
-     'DIRECTORY' = 'directory'
-}
+import { DIRECTORY_TYPE } from './constants';
 
 export interface DirectoryBase {
     name: string;
