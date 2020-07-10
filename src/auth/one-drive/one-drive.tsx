@@ -1,33 +1,38 @@
 import React from 'react';
 import MSLogin from 'react-microsoft-login'
-import OneDrive from '../../app/onedrive';
+import { AuthData } from '../../app/interfaces';
+import { DRIVE } from '../../drive-components';
 
-class OneDriveLogin extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props);
+interface OneDriveProps {
+    onAuthSuccess:(drive: DRIVE, authData: AuthData) => any;
+}
 
-        this.state = {
-            token: '',
+class OneDriveLogin extends React.Component<OneDriveProps, any> {
+    public onAuthSuccess(res: any) {
+        let authData: AuthData = {
+            token: res.authResponseWithAccessToken.accessToken,
+            name: res.authResponseWithAccessToken.account.name,
+            email: res.authResponseWithAccessToken.account.userName,
+            expiration_time: new Date(res.authResponseWithAccessToken.expiresOn).getTime(),
+            image_url: '',
         };
-    }
-    public oneDriveOnResponse(err: any, data: any) {
-        console.log({
-            err, data
-        });
-        this.setState({ token: data.authResponseWithAccessToken.accessToken });
+
+        this.props.onAuthSuccess(DRIVE.ONE_DRIVE, authData);
     }
 
     public render() {
-        console.log(this.state.token)
         return (
-            <React.Fragment>
-                <MSLogin 
-                    clientId="12f99e3f-599e-47ce-b76f-966d36fbe5d5"
-                    authCallback={(err: any, data: any) => this.oneDriveOnResponse(err, data)}
-                    graphScopes={['Files.ReadWrite.All']}
-                />
-                <OneDrive token={this.state.token} />
-            </React.Fragment>
+            <MSLogin 
+                clientId="12f99e3f-599e-47ce-b76f-966d36fbe5d5"
+                authCallback={(err: any, data: any) => {
+                    if(data) {
+                        this.onAuthSuccess(data);
+                    } else {
+                        console.log({err});
+                    }
+                }}
+                graphScopes={['Files.ReadWrite.All']}
+            />
         );
     }
 }

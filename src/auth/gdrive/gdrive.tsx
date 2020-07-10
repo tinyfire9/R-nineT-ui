@@ -1,32 +1,34 @@
 import React, { ReactElement } from 'react';
 import { GoogleLogin } from 'react-google-login';
-import DirSelectorView from '../../lib/dir-selector';
+import { DRIVE } from '../../constants';
+import { AuthData } from '../../app/interfaces';
 
-class GDriveAuth extends React.Component {
-    public componentDidMount(){
-        let script = document.createElement("script");
-        script.src = "https://apis.google.com/js/api.js";
-        script.async = true;
-        document.body.appendChild(script);
-    }
+interface GDriveAuthProps {
+    onAuthSuccess(drive: DRIVE, authData: AuthData): any;
+}
 
-    public onResponse(res: any, type: string) {
-        console.log(type);
-        console.log(res);
+class GDriveAuth extends React.Component<GDriveAuthProps, any> {
+    public onAuthSuccess(res: any) {
+        let authData: AuthData = {
+            token: res.accessToken,
+            email: res.profileObj.email,
+            name: res.profileObj.name,
+            image_url: res.profileObj.imageUrl,
+            expiration_time: res.tokenObj.expires_at
+        };
+
+        this.props.onAuthSuccess(DRIVE.GOOGLE_DRIVE, authData);
     }
 
     public render() {
         return (
-            <div>
-                <GoogleLogin
-                    clientId="609636173272-ibmdbh1uki3smkdqjbrga0ig3490mhc8.apps.googleusercontent.com"
-                    onSuccess={(res) => { this.onResponse(res, 'success');}}
-                    onFailure={(res) => { this.onResponse(res, 'error')}}
-                    buttonText="Google Drive"
-                    isSignedIn={true}
-                />
-                <br/>
-            </div>
+            <GoogleLogin
+                clientId="609636173272-ibmdbh1uki3smkdqjbrga0ig3490mhc8.apps.googleusercontent.com"
+                onSuccess={(response: any) => this.onAuthSuccess(response)}
+                onFailure={(res) => { console.log(res)}}
+                buttonText="Google Drive"
+                isSignedIn={true}
+            />
         );
     }
 }
