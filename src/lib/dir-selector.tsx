@@ -1,5 +1,6 @@
 import React from 'react';
-import { DriveDirectory, DIRECTORY_TYPE } from '../interfaces';
+import { DriveDirectory } from '../interfaces';
+import { DIRECTORY_TYPE } from '../constants';
 
 interface DirSelectorViewProps {
     currentDirId: string;

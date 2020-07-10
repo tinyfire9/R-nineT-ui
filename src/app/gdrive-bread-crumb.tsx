@@ -1,7 +1,7 @@
 import React from 'react';
-import { DIRECTORY_TYPE } from '../interfaces';
+import { DIRECTORY_TYPE } from '../constants';
 
-interface BreadCrumbItem {
+export interface BreadCrumbItem {
     id: string;
     name: string;
     type: DIRECTORY_TYPE;

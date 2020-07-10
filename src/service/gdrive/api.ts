@@ -1,4 +1,4 @@
-import { DIRECTORY_TYPE } from '../../interfaces';
+import { DIRECTORY_TYPE } from '../../constants';
 import { GDriveDirectory } from '../../interfaces';
 
 interface GDriveResponse {
