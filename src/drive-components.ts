@@ -1,4 +1,4 @@
-import { GDrive, OneDrive } from './app/index';
+import { GDrive, OneDrive } from './app/drives';
 import { GDriveAuth, OneDriveAuth } from './auth';
 import { DRIVE } from './constants'
 

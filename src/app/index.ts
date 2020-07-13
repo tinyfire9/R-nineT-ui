@@ -1,4 +1,3 @@
-import GDrive from './gdrive';
-import OneDrive from './onedrive';
+import App from './app'
 
-export { OneDrive, GDrive };
+export { App };
