@@ -1,6 +1,15 @@
 
 import { DRIVE } from '../constants';
 
+export interface Drives {
+    [drive: string]: DriveState
+}
+
+export enum WINDOW {
+    LEFT = 'left',
+    RIGHT = 'right'
+}
+
 export interface AuthData {
     token: string;
     name: string;
@@ -12,7 +21,7 @@ export interface AuthData {
 export interface DriveState {
     drive: DRIVE;
     authData: AuthData,
-    current_directory: Object | any;
+    currentDirectoryID: string;
 }
 
 export interface TransferSession {
