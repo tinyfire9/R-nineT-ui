@@ -7,12 +7,12 @@ export interface BreadCrumbItem {
     type: DIRECTORY_TYPE;
 }
 
-interface GDriveBreadCrumbProps {
+interface BreadCrumbProps {
     breadcrumbItems: BreadCrumbItem[];
     fetchSubDirectory: (id: string) => any;
 }
 
-class GDriveBreadCrumb extends React.Component<GDriveBreadCrumbProps, any> {
+class Breadcrumb extends React.Component<BreadCrumbProps, any> {
     public static defaultProps = {
         breadcrumbItems: [],
         fetchSubDirectory() {}
@@ -44,4 +44,4 @@ class GDriveBreadCrumb extends React.Component<GDriveBreadCrumbProps, any> {
     }
 }
 
-export default GDriveBreadCrumb;
+export default Breadcrumb;
