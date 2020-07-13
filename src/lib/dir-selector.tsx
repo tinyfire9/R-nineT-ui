@@ -5,7 +5,7 @@ import { DIRECTORY_TYPE } from '../constants';
 interface DirSelectorViewProps {
     currentDirId: string;
     subdirectory: DriveDirectory[];
-    listGDriveSubDir(id: string, name: string, type: DIRECTORY_TYPE): any;
+    fetchSubDirectories(id: string, name: string, type: DIRECTORY_TYPE): any;
     transferDirectories(dirs: string[]): any;
     fetchNextPage(): any;
 }
@@ -19,7 +19,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
     public static defaultProps = {
         currentDirId: '',
         subdirectory: [],
-        listGDriveSubDir: () => {},
+        fetchSubDirectories: () => {},
         transferDirectories: () => {}
     };
 
@@ -98,7 +98,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                                 }
                                 onClick={() => {
                                     if(type == DIRECTORY_TYPE.DIRECTORY) {
-                                        this.props.listGDriveSubDir(id, name, type);
+                                        this.props.fetchSubDirectories(id, name, type);
                                     }
                                 }}
                             >
