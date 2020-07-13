@@ -1,12 +1,7 @@
 import { DIRECTORY_TYPE } from './constants';
 
-export interface DirectoryBase {
+export interface DriveDirectory {
+    id: string;
     name: string;
     type: DIRECTORY_TYPE;
 }
-
-export interface GDriveDirectory extends DirectoryBase {
-    id: string;
-}
-
-export type DriveDirectory = DirectoryBase | GDriveDirectory;
