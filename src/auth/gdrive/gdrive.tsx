@@ -23,6 +23,7 @@ class GDriveAuth extends React.Component<GDriveAuthProps, any> {
     public render() {
         return (
             <GoogleLogin
+                scope={"https://www.googleapis.com/auth/drive"}
                 clientId="609636173272-ibmdbh1uki3smkdqjbrga0ig3490mhc8.apps.googleusercontent.com"
                 onSuccess={(response: any) => this.onAuthSuccess(response)}
                 onFailure={(res) => { console.log(res)}}
