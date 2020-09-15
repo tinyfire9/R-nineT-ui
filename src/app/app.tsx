@@ -3,10 +3,11 @@ import { DriveState, AuthData, TransferSession, Drives, WINDOW } from './interfa
 import { DRIVE } from '../constants';
 import DrivesDropdown from '../lib/drives-dropdown';
 import DriveWindow from '../lib/drive-window';
+import axios from 'axios';
 
 interface TransferData {
     selectedItems?: any;
-    currentDirectory?: any;
+    uploadDirectoryID?: string;
 }
 
 interface DrivePayload {
@@ -52,7 +53,7 @@ class App extends React.Component <any, AppState> {
         return drives;
     }
 
-    private onAuthSuccess(drive: DRIVE, authData: any) {
+    private onAuthSuccess(drive: DRIVE, authData: AuthData) {
         let newState: AppState = {...this.state};
         
         let { authData: _authData } = newState.drives[drive];
@@ -112,12 +113,21 @@ class App extends React.Component <any, AppState> {
                 drive: dest.drive,
                 authData: dest.authData,
                 transferData: {
-                    currentDirectory: this.state.drives[dest.drive].currentDirectoryID
+                    uploadDirectoryID: this.state.drives[dest.drive].currentDirectoryID
                 }
             }
         };
 
-        console.log({ payload });
+        let headers = new Headers();
+        headers.set('Content-Type', 'application/json');
+
+        axios({
+            url: "http://localhost:8080/transfer",
+            method: 'post',
+            data: payload,
+            headers,
+        })
+        .then(res => console.log(res.data));
     }
 
     private onDriveSelect(drive: DRIVE, window: WINDOW) {
