@@ -9,7 +9,7 @@ interface GDriveResponse {
 class GDriveAPI {
     private uri = "https://www.googleapis.com/drive/v3/files";
     public fetchSubDirectory(token: string, directory_id?: string, nextPageToken?: string) {
-        let uri = this.uri + '?access_token=' + token;
+        let uri = this.uri + '?fields=*&access_token=' + token;
 
         if(directory_id){
             uri  +=  '&q=\'' + directory_id + '\'+in+parents'
