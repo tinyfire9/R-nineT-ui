@@ -116,7 +116,7 @@ class GDrive extends React.Component<GDriveProps, GDriveState> {
               <React.Fragment>
                 <Breadcrumb
                   breadcrumbItems={this.state.breadcrumbItems}
-                  fetchSubDirectory={(id: string) => this.fetchSubDirectory(id)}
+                  fetchSubDirectory={(id: string) => this.fetchSubDirectories(id)}
                 />
                 <DirSelectorView
                   currentDirId={this.props.currentDirectoryID}
