@@ -33,7 +33,7 @@ class GDrive extends React.Component<GDriveProps, GDriveState> {
   }
 
   public componentDidMount(){
-    this.fetchSubDirectory();
+    this.fetchSubDirectories();
   }
 
   public makeRootDirBreadCrumb = () => ({
@@ -53,8 +53,8 @@ class GDrive extends React.Component<GDriveProps, GDriveState> {
     return breadcrumbItems;
   }
 
-  public fetchSubDirectory(dir_id: string='root') {
-    this.api.fetchSubDirectory(this.props.token, dir_id)
+  public fetchSubDirectories(dir_id: string='root') {
+    this.api.fetchSubDirectories(this.props.token, dir_id)
       .then((res: any) => {
         this.props.onCurrentDirectoryIDUpdate(DRIVE.GOOGLE_DRIVE, dir_id);
 
@@ -68,7 +68,7 @@ class GDrive extends React.Component<GDriveProps, GDriveState> {
 
   public fetchSubDirectoryFromCurrentDirectory(id: string, name: string, type: DIRECTORY_TYPE) {
     let breadcrumbItems = [...this.state.breadcrumbItems];
-    this.api.fetchSubDirectory(this.props.token, id)
+    this.api.fetchSubDirectories(this.props.token, id)
       .then((res: any) => {
         console.log({ res })
         breadcrumbItems.push({
@@ -94,7 +94,7 @@ class GDrive extends React.Component<GDriveProps, GDriveState> {
       return;
     }
 
-    this.api.fetchSubDirectory(this.props.token, currentDirId, nextPageToken)
+    this.api.fetchSubDirectories(this.props.token, currentDirId, nextPageToken)
       .then((res: any) => {
         let subDir = [...this.state.subDir, ... res.files];
         this.setState({
