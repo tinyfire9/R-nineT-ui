@@ -1,10 +1,10 @@
-import { GDrive, OneDrive } from './app/drives';
+import { GDrive, OneDrive, Box } from './app/drives';
 import { GDriveAuth, OneDriveAuth } from './auth';
 import { DRIVE } from './constants'
 
 interface DriveComponents {
-    authComponent:  typeof GDriveAuth | typeof OneDriveAuth;
-    dirSelectorComponent: typeof GDrive | typeof OneDrive;
+    authComponent:  typeof GDriveAuth | typeof OneDriveAuth | any;
+    dirSelectorComponent: typeof GDrive | typeof OneDrive | typeof Box;
 }
 
 export const DRIVE_COMPONENTS: {[drive: string] : DriveComponents } = {
@@ -15,5 +15,9 @@ export const DRIVE_COMPONENTS: {[drive: string] : DriveComponents } = {
     [DRIVE.ONE_DRIVE]: {
         authComponent: OneDriveAuth,
         dirSelectorComponent: OneDrive,
+    },
+    [DRIVE.BOX]: {
+        authComponent: null,
+        dirSelectorComponent: Box 
     }
 };
