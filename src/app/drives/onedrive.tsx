@@ -79,7 +79,7 @@ class OneDrive extends React.Component<OneDriveProps, OneDriveState> {
                 <React.Fragment>
                     <Breadcrumb
                         breadcrumbItems={this.state.breadcrumbItems}
-                        fetchSubDirectory={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
+                        fetchSubDirectories={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
                     />
                     <DirSelectorView
                         currentDirId={this.props.currentDirectoryID}
