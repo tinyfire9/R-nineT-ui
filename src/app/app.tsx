@@ -34,7 +34,7 @@ class App extends React.Component <any, AppState> {
 
         this.state = {
             leftWindowDrive: DRIVE.GOOGLE_DRIVE,
-            rightWindowDrive: DRIVE.ONE_DRIVE,
+            rightWindowDrive: DRIVE.BOX,
             drives: this.initDrivesState(),
             transfer_sessions: []
         }
@@ -46,7 +46,7 @@ class App extends React.Component <any, AppState> {
             drives[drive.toLocaleLowerCase()] = {
                 drive: drive.toLowerCase(),
                 authData: {} as any,
-                currentDirectoryID: 'root',
+                currentDirectoryID: drive == DRIVE.BOX ? '0' : 'root',
             }
         }
 
@@ -144,6 +144,9 @@ class App extends React.Component <any, AppState> {
 
     public render() {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
+        console.log({
+            drives: JSON.stringify(this.state)
+        })
 
         return(
             <React.Fragment>
