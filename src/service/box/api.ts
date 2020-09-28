@@ -5,9 +5,9 @@ import Axios, { AxiosResponse } from 'axios';
 
 export class BoxAPI {
     public getAndStoreToken(code: string){
-        Axios.get('http://localhost:8080/token/box/'+code)
+        Axios.get('http://localhost:8080/token/get/box/'+code)
             .then((res: AxiosResponse) => {
-                localStorage.setItem('box-token', res.data.token);
+                localStorage.setItem('box-token', JSON.stringify(res.data));
             })
       }
     
