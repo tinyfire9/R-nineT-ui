@@ -40,12 +40,39 @@ class App extends React.Component <any, AppState> {
         }
     }
 
+    private getAuthDataFromLocalStorage(drive: string): AuthData{
+        let authData: AuthData = {
+            token: '',
+            name: '',
+            email: '',
+            image_url: '',
+            expiration_time: 0,
+        };
+
+        let data: any = JSON.parse(localStorage.getItem(`${drive}-TOKEN`.toLocaleLowerCase()) || '{}');
+        if(!data || data === null){
+            return authData;
+        }
+
+        if(drive.toLowerCase() === DRIVE.BOX){
+            authData.token = data['accessToken'];
+            authData.name = data['name'];
+            authData.email = data['email'];
+            authData.image_url = data['imageURL'];
+            authData.expiration_time = data['expirationTime'];
+
+            return authData;
+        }
+
+        return authData;
+    }
+
     private initDrivesState() {
         let drives: any = {};
         for( let drive in DRIVE) {
             drives[drive.toLocaleLowerCase()] = {
                 drive: drive.toLowerCase(),
-                authData: {} as any,
+                authData: this.getAuthDataFromLocalStorage(drive),
                 currentDirectoryID: drive == DRIVE.BOX ? '0' : 'root',
             }
         }
