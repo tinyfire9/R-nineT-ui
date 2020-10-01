@@ -8,6 +8,7 @@ export class BoxAPI {
         Axios.get('http://localhost:8080/token/get/box/'+code)
             .then((res: AxiosResponse) => {
                 localStorage.setItem('box-token', JSON.stringify(res.data));
+                window.location.href = 'https://localhost:3000';
             })
       }
     
