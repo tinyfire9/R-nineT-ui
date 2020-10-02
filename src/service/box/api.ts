@@ -1,18 +1,10 @@
-import React from 'react';
 import { DriveDirectory } from '../../interfaces';
-import { DIRECTORY_TYPE } from '../../constants';
-import Axios, { AxiosResponse } from 'axios';
+import { DIRECTORY_TYPE, DRIVE } from '../../constants';
+import API from '../api';
 
-export class BoxAPI {
-    public getAndStoreToken(code: string){
-        Axios.get('http://localhost:8080/token/get/box/'+code)
-            .then((res: AxiosResponse) => {
-                localStorage.setItem('box-token', JSON.stringify(res.data));
-                window.location.href = 'https://localhost:3000';
-            })
-      }
-    
-    public fetchSubDirectories(token: string, directoryID: string){
+export class BoxAPI extends API{
+    drive: DRIVE = DRIVE.BOX;
+    public fetchSubDirectories(token: string, directoryID: string, nextPageToken?: string): Promise<DriveDirectory[]>{
         let uri = `https://api.box.com/2.0/folders/${directoryID}/items`;
 
         let headers = new Headers();
