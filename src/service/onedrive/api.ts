@@ -1,10 +1,12 @@
 import { DriveDirectory } from '../../interfaces';
-import { DIRECTORY_TYPE } from '../../constants';
+import { DIRECTORY_TYPE, DRIVE } from '../../constants';
+import API from '../api';
 
-class API {
+class OneDriveAPI extends API {
+    drive:DRIVE = DRIVE.ONE_DRIVE;
     private uri = 'https://graph.microsoft.com/v1.0';
 
-    public fetchSubDirectories(token: string, dir_id:string = 'root') {
+    public fetchSubDirectories(token: string, dir_id:string = 'root'): Promise<DriveDirectory[]> {
         let uri = `${this.uri}/me/drive/items/${dir_id}/children`;
         return new Promise((resolve: any, reject: any) => {
             fetch(uri, {
@@ -32,4 +34,4 @@ class API {
     }
 }
 
-export default API;
+export default OneDriveAPI;
