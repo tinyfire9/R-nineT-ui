@@ -1,14 +1,16 @@
-import { DIRECTORY_TYPE } from '../../constants';
+import { DIRECTORY_TYPE, DRIVE } from '../../constants';
 import { DriveDirectory } from '../../interfaces';
+import API from '../api';
 
 interface GDriveResponse {
     nextPageToken: string;
     items: DriveDirectory[];
 }
 
-class GDriveAPI {
+class GDriveAPI extends API{
+    drive: DRIVE = DRIVE.GOOGLE_DRIVE;
     private uri = "https://www.googleapis.com/drive/v3/files";
-    public fetchSubDirectories(token: string, directory_id?: string, nextPageToken?: string) {
+    public fetchSubDirectories(token: string, directory_id?: string, nextPageToken?: string): Promise<DriveDirectory[]> {
         let uri = this.uri + '?fields=*&access_token=' + token;
 
         if(directory_id){
