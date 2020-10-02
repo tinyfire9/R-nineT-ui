@@ -49,20 +49,16 @@ class App extends React.Component <any, AppState> {
             expiration_time: 0,
         };
 
-        let data: any = JSON.parse(localStorage.getItem(`${drive}-TOKEN`.toLocaleLowerCase()) || '{}');
+        let data: any = JSON.parse(localStorage.getItem(`${drive}_TOKEN`.toLocaleLowerCase()) || '{}');
         if(!data || data === null){
             return authData;
         }
 
-        if(drive.toLowerCase() === DRIVE.BOX){
-            authData.token = data['accessToken'];
-            authData.name = data['name'];
-            authData.email = data['email'];
-            authData.image_url = data['imageURL'];
-            authData.expiration_time = data['expirationTime'];
-
-            return authData;
-        }
+        authData.token = data['accessToken'];
+        authData.name = data['name'];
+        authData.email = data['email'];
+        authData.image_url = data['imageURL'];
+        authData.expiration_time = data['expirationTime'];
 
         return authData;
     }
