@@ -26,7 +26,7 @@ abstract class Drive extends React.Component<DriveProps, any>{
         breadcrumbItems: [this.makeRootBreadcrumb()]
     });
 
-    private makeRootBreadcrumb = () => ({id: this.rootDirectoryID, name: 'Drive', type: DIRECTORY_TYPE.DIRECTORY });
+    private makeRootBreadcrumb = () => ({id: this.rootDirectoryID || '', name: 'Drive', type: DIRECTORY_TYPE.DIRECTORY });
 
     private fetchSubDriectories(id: string, name: string, type: DIRECTORY_TYPE) {
         this.api.fetchSubDirectories(this.props.token, id, )
