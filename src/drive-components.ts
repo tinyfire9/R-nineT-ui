@@ -1,10 +1,11 @@
 import { GDrive, OneDrive, Box } from './app/drives';
-import { GDriveAuth, OneDriveAuth, BoxAuth } from './auth';
+import { GDriveAuth, OneDriveAuth, BoxAuth, DropboxAuth } from './auth';
 import { DRIVE } from './constants'
+import Dropbox from './app/drives/dropbox';
 
 interface DriveComponents {
-    authComponent:  typeof GDriveAuth | typeof OneDriveAuth | any;
-    dirSelectorComponent: typeof GDrive | typeof OneDrive | typeof Box;
+    authComponent:  typeof GDriveAuth | typeof OneDriveAuth | typeof BoxAuth | typeof DropboxAuth;
+    dirSelectorComponent: typeof GDrive | typeof OneDrive | typeof Box | typeof Dropbox;
 }
 
 export const DRIVE_COMPONENTS: {[drive: string] : DriveComponents } = {
@@ -19,5 +20,9 @@ export const DRIVE_COMPONENTS: {[drive: string] : DriveComponents } = {
     [DRIVE.BOX]: {
         authComponent: BoxAuth,
         dirSelectorComponent: Box
+    },
+    [DRIVE.DROPBOX]: {
+        authComponent: DropboxAuth,
+        dirSelectorComponent: Dropbox
     }
 };
