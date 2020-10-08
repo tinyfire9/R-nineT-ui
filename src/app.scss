@@ -1,0 +1,12 @@
+.r-ninet-drives {
+    display: flex;
+
+    .r-ninet-left-drive {
+        width: 50%;
+    }
+
+    .r-ninet-right-drive {
+        width: 40%;
+        float: right;
+    }
+}
