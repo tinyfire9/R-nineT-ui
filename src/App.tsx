@@ -2,8 +2,8 @@ import React from 'react';
 import App from '../src/app/app';
 import { BoxAPI } from '../src/service/box/api';
 import { DRIVE } from './constants';
-import { DropboxAuth } from './auth';
 import DropboxAPI from './service/dropbox/api';
+import './app.scss';
 
 
 class RnineT extends React.Component<any, any> {
@@ -29,14 +29,9 @@ class RnineT extends React.Component<any, any> {
 
   public render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <div style={{ textAlign: "center" }}>
-            <h1>R nineT</h1>
-            <DropboxAuth />
-            <App />
-          </div>
-        </header>
+      <div className="r-ninet" style={{ textAlign: "center" }}>
+        <h1>R nineT</h1>
+        <App />
       </div>
     );
   }
