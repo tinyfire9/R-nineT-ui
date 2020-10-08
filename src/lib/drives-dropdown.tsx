@@ -11,22 +11,33 @@ interface DrivesDropdownProps {
 }
 
 class DrivesDropdown extends React.Component<DrivesDropdownProps, any> {
-    public toDisplayName(drive: DRIVE) {
+    private toDisplayName(drive: DRIVE) {
+        if(drive === DRIVE.UNDEFINED){
+            return 'Select Drive';
+        }
+
         return drive.split('_').map((word: string) => word[0].toLocaleUpperCase() + word.slice(1)).join(' ');
+    }
+
+    private shouldDisable(drive: DRIVE){
+        if(drive === DRIVE.UNDEFINED){
+            return false;
+        }
+
+        return this.props.leftWindowDrive == drive || this.props.rightWindowDrive == drive;
     }
 
     public render() {
         return (
             <React.Fragment>
-                <label>Select Drive: </label>
-                <select>
+                <select onChange={e => this.props.onDriveSelect(e.target.value as any)}>
                     {
                         Object.keys(this.props.drives)
                             .map((drive: any) => {
                                 return (
                                     <option
-                                        disabled={this.props.leftWindowDrive == drive || this.props.rightWindowDrive == drive}
-                                        onClick={() => this.props.onDriveSelect(drive)}
+                                        disabled={this.shouldDisable(drive)}
+                                        value={drive}
                                     >
                                         { this.toDisplayName(drive) }
                                     </option>
