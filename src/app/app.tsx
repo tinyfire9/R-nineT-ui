@@ -4,6 +4,7 @@ import { DRIVE } from '../constants';
 import DrivesDropdown from '../lib/drives-dropdown';
 import DriveWindow from '../lib/drive-window';
 import axios from 'axios';
+import DropboxAPI from '../service/dropbox/api';
 
 interface TransferData {
     selectedItems?: any;
@@ -33,8 +34,8 @@ class App extends React.Component <any, AppState> {
         super(props);
 
         this.state = {
-            leftWindowDrive: DRIVE.GOOGLE_DRIVE,
-            rightWindowDrive: DRIVE.BOX,
+            leftWindowDrive: DRIVE.UNDEFINED,
+            rightWindowDrive: DRIVE.UNDEFINED,
             drives: this.initDrivesState(),
             transfer_sessions: []
         }
@@ -65,11 +66,17 @@ class App extends React.Component <any, AppState> {
 
     private initDrivesState() {
         let drives: any = {};
+        let rootDirectoryID = {
+            [`${DRIVE.GOOGLE_DRIVE}`]: 'root',
+            [`${DRIVE.ONE_DRIVE}`]: 'root',
+            [`${DRIVE.BOX}`]: '0',
+            [`${DRIVE.DROPBOX}`]: '',
+        }
         for( let drive in DRIVE) {
             drives[drive.toLocaleLowerCase()] = {
                 drive: drive.toLowerCase(),
                 authData: this.getAuthDataFromLocalStorage(drive),
-                currentDirectoryID: drive == DRIVE.BOX ? '0' : 'root',
+                currentDirectoryID: rootDirectoryID[drive],
             }
         }
 
@@ -167,45 +174,55 @@ class App extends React.Component <any, AppState> {
 
     public render() {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
-        console.log({
-            drives: JSON.stringify(this.state)
-        })
 
         return(
-            <React.Fragment>
-                <DrivesDropdown
-                    window={WINDOW.LEFT}
-                    leftWindowDrive={this.state.leftWindowDrive}
-                    rightWindowDrive={this.state.rightWindowDrive}
-                    drives={this.state.drives}
-                    onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.LEFT)}
-                />
-                <br />
-                <DriveWindow
-                    drive={leftWindowDrive}
-                    token={drives[leftWindowDrive].authData.token}
-                    currentDirectoryID={drives[leftWindowDrive].currentDirectoryID}
-                    onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
-                    onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
-                    onTransferRequest={(drive: DRIVE, selectedItems: any) => this.onTransferRequest(drive, selectedItems )}
-                />
-                <DrivesDropdown
-                    window={WINDOW.RIGHT}
-                    leftWindowDrive={this.state.leftWindowDrive}
-                    rightWindowDrive={this.state.rightWindowDrive}
-                    drives={this.state.drives}
-                    onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.RIGHT)}
-                />
-                <br />
-                <DriveWindow
-                    drive={rightWindowDrive}
-                    token={drives[rightWindowDrive].authData.token}
-                    currentDirectoryID={drives[rightWindowDrive].currentDirectoryID}
-                    onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
-                    onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
-                    onTransferRequest={(drive: DRIVE, selectedItems: any) => this.onTransferRequest(drive, selectedItems )}
-                />
-            </React.Fragment>
+            <div className="r-ninet-drives">
+                <div className="r-ninet-left-drive">
+                    <DrivesDropdown
+                        window={WINDOW.LEFT}
+                        leftWindowDrive={this.state.leftWindowDrive}
+                        rightWindowDrive={this.state.rightWindowDrive}
+                        drives={this.state.drives}
+                        onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.LEFT)}
+                    />
+                    <br />
+                    {
+                        leftWindowDrive !== DRIVE.UNDEFINED ?
+                            <DriveWindow
+                                drive={leftWindowDrive}
+                                token={drives[leftWindowDrive].authData.token}
+                                currentDirectoryID={drives[leftWindowDrive].currentDirectoryID}
+                                onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
+                                onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
+                                onTransferRequest={(drive: DRIVE, selectedItems: any) => this.onTransferRequest(drive, selectedItems )}
+                            /> : 
+                            ''
+                    }
+                </div>
+                <div className="r-ninet-right-drive">
+                    <DrivesDropdown
+                        window={WINDOW.RIGHT}
+                        leftWindowDrive={this.state.leftWindowDrive}
+                        rightWindowDrive={this.state.rightWindowDrive}
+                        drives={this.state.drives}
+                        onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.RIGHT)}
+                    />
+                    <br />
+                    {
+                        rightWindowDrive !== DRIVE.UNDEFINED ? 
+                            <DriveWindow
+                                drive={rightWindowDrive}
+                                token={drives[rightWindowDrive].authData.token}
+                                currentDirectoryID={drives[rightWindowDrive].currentDirectoryID}
+                                onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
+                                onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
+                                onTransferRequest={(drive: DRIVE, selectedItems: any) => this.onTransferRequest(drive, selectedItems )}
+                            /> :
+                            ''
+
+                    }
+                </div>
+            </div>
         )
     }
 }
