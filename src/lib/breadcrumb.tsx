@@ -25,8 +25,10 @@ class Breadcrumb extends React.Component<BreadCrumbProps, any> {
                         <a
                             style={
                                 {
+                                    cursor: 'pointer',
                                     color: (type == DIRECTORY_TYPE.DIRECTORY) ? 'blue': '',
-                                    borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''}
+                                    borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''
+                                }
                             }
                             onClick={() => this.props.fetchSubDirectories(id)} >{name}
                         </a>

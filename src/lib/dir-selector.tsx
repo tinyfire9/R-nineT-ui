@@ -93,6 +93,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                             <a
                                 style={
                                     {
+                                        cursor: (type == DIRECTORY_TYPE.DIRECTORY) ? 'pointer' : '',
                                         color: (type == DIRECTORY_TYPE.DIRECTORY) ? 'blue': '',
                                         borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''}
                                 }
