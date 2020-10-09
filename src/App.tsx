@@ -4,6 +4,7 @@ import { BoxAPI } from '../src/service/box/api';
 import { DRIVE } from './constants';
 import DropboxAPI from './service/dropbox/api';
 import './app.scss';
+import GDriveAPI from './service/gdrive/api';
 
 
 class RnineT extends React.Component<any, any> {
@@ -22,6 +23,15 @@ class RnineT extends React.Component<any, any> {
         case DRIVE.DROPBOX.toLowerCase(): {
           let dropboxAPI: DropboxAPI = new DropboxAPI();
           dropboxAPI.getAndStoreToken(url.get('code') || '');
+        }
+
+        case DRIVE.GOOGLE_DRIVE.toLowerCase():{
+          url = new URLSearchParams('?' + window.location.hash.substr(1))
+          let gDriveAPI: GDriveAPI = new GDriveAPI();
+          let accessToken = url.get('access_token') || '';
+          let expiresIn = url.get('expires_in') || '';
+
+          gDriveAPI.storeToken({ accessToken, expiresIn });
         }
       }
     }
