@@ -9,10 +9,14 @@ abstract class API {
     public getAndStoreToken(code: string){
         Axios.get(`http://localhost:8080/token/get/${this.drive.toLowerCase()}/${code}`)
             .then((res: AxiosResponse) => {
-                localStorage.setItem(`${this.drive.toLowerCase()}_token`, JSON.stringify(res.data));
-                window.location.href = window.origin;
-            })
-      }
+                this.storeToken(res.data);
+            });
+    }
+
+    public storeToken(data: any) {
+        localStorage.setItem(`${this.drive.toLowerCase()}_token`, JSON.stringify(data));
+        window.location.href = window.origin;
+    }
 }
 
 export default API;
