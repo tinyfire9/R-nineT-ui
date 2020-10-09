@@ -1,36 +1,22 @@
 import React, { ReactElement } from 'react';
-import { GoogleLogin } from 'react-google-login';
 import { DRIVE } from '../../constants';
 import { AuthData } from '../../app/interfaces';
+import ClientOAuth2 from 'client-oauth2';
 
-interface GDriveAuthProps {
-    onAuthSuccess(drive: DRIVE, authData: AuthData): any;
-}
+class GDriveAuth extends React.Component<any, any> {
+    private onLogin(){
+        let gDriveAuth = new ClientOAuth2({
+            clientId: '719295962986-hhjcql786up8ifdho3pgd4mi73f4l92v.apps.googleusercontent.com',
+            scopes: ["https://www.googleapis.com/auth/drive"],
+            authorizationUri: 'https://accounts.google.com/o/oauth2/v2/auth',
+            redirectUri: window.origin + '?auth-drive=google_drive',
+        });
 
-class GDriveAuth extends React.Component<GDriveAuthProps, any> {
-    public onAuthSuccess(res: any) {
-        let authData: AuthData = {
-            token: res.accessToken,
-            email: res.profileObj.email,
-            name: res.profileObj.name,
-            image_url: res.profileObj.imageUrl,
-            expiration_time: res.tokenObj.expires_at
-        };
-
-        this.props.onAuthSuccess(DRIVE.GOOGLE_DRIVE, authData);
+        window.location.href = gDriveAuth.token.getUri();        
     }
 
     public render() {
-        return (
-            <GoogleLogin
-                scope={"https://www.googleapis.com/auth/drive"}
-                clientId="609636173272-ibmdbh1uki3smkdqjbrga0ig3490mhc8.apps.googleusercontent.com"
-                onSuccess={(response: any) => this.onAuthSuccess(response)}
-                onFailure={(res) => { console.log(res)}}
-                buttonText="Google Drive"
-                isSignedIn={true}
-            />
-        );
+        return <button onClick={() =>this.onLogin()}>Login to Google Drive</button>;
     }
 }
 
