@@ -1,6 +1,8 @@
 import React from 'react';
 import { DriveDirectory } from '../interfaces';
 import { DIRECTORY_TYPE } from '../constants';
+import { HTMLTable, Checkbox, Icon, Intent } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 
 interface DirSelectorViewProps {
     currentDirId: string;
@@ -83,20 +85,14 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 return (
                     <tr key={id}>
                         <td>
-                            <input 
-                                type="checkbox"
+                            <Checkbox 
                                 checked={selected_subdirectories[`${id}`]}
                                 onClick={() => this.onSelectedSubDirListUpdate(`${id}`)}
                             />
                         </td>
+                        <td><Icon icon={type == DIRECTORY_TYPE.DIRECTORY ? IconNames.FOLDER_CLOSE : IconNames.DOCUMENT} intent={Intent.PRIMARY}/></td>
                         <td>
                             <a
-                                style={
-                                    {
-                                        cursor: (type == DIRECTORY_TYPE.DIRECTORY) ? 'pointer' : '',
-                                        color: (type == DIRECTORY_TYPE.DIRECTORY) ? 'blue': '',
-                                        borderBottom: (type == DIRECTORY_TYPE.DIRECTORY) ? '1px solid blue': ''}
-                                }
                                 onClick={() => {
                                     if(type == DIRECTORY_TYPE.DIRECTORY) {
                                         this.props.fetchSubDirectories(id, name, type);
@@ -106,7 +102,6 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                                 { name }
                             </a>
                         </td>
-                        <td>{type}</td>
                     </tr>
                 );
             });
@@ -120,24 +115,23 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 <button onClick={() => this.props.transferDirectories(selected_subdirectories)}>
                     Transfer {selected_subdirectories.length} items >  
                 </button>
-                <table className="drive-dir-selector-table" style={{border: 'black'}}>
+                <HTMLTable className="drive-dir-selector-table" style={{border: 'black'}}>
                     <thead>
                         <tr>
                             <td>
-                                <input 
-                                    type="checkbox"
+                                <Checkbox
                                     checked={this.state.select_all_active}
                                     onClick={() => this.toggleSelectAll()}
                                 />
                             </td>
-                            <td>File Name</td>
-                            <td>File Type</td>
+                            <td />
+                            <td>Name</td>
                         </tr>
                     </thead>
                     <tbody>
                         { this.makeTableRows() }
                     </tbody>
-                </table>
+                </HTMLTable>
                 {this.props.currentDirId ? <button onClick={() => this.props.fetchNextPage()}>Load more ⬇️ </button> : ''}
                 <br/>
             </React.Fragment>
