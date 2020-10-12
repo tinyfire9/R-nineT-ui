@@ -1,5 +1,7 @@
 import React from 'react';
+import { Button } from '@blueprintjs/core';
 import clientOAuth2 from 'client-oauth2';
+
 
 class BoxAuth extends React.Component<any, any> {
     private onClick(){
@@ -13,7 +15,11 @@ class BoxAuth extends React.Component<any, any> {
     }
 
     public render(){
-        return (<button onClick={() => this.onClick()}>Login to Box</button>); 
+        return (
+            <Button onClick={() => this.onClick()}>
+                 Login to Box
+            </Button>
+        ); 
     }
 }
 

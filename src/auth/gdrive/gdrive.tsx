@@ -1,6 +1,5 @@
-import React, { ReactElement } from 'react';
-import { DRIVE } from '../../constants';
-import { AuthData } from '../../app/interfaces';
+import React from 'react';
+import { Button } from '@blueprintjs/core';
 import ClientOAuth2 from 'client-oauth2';
 
 class GDriveAuth extends React.Component<any, any> {
@@ -16,7 +15,7 @@ class GDriveAuth extends React.Component<any, any> {
     }
 
     public render() {
-        return <button onClick={() =>this.onLogin()}>Login to Google Drive</button>;
+        return <Button onClick={() =>this.onLogin()}>Login to Google Drive</Button>;
     }
 }
 

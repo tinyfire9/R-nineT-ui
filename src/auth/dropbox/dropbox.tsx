@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '@blueprintjs/core';
 import OAuth2Client from 'client-oauth2';
 
 class Dropbox extends React.Component {
@@ -14,7 +15,7 @@ class Dropbox extends React.Component {
 
     public render() {
         return (
-            <button onClick={() => this.onLogin()}>Login to Dropbox</button>
+            <Button onClick={() => this.onLogin()}>Login to Dropbox</Button>
         )
     }
 }
