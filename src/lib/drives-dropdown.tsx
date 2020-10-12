@@ -1,4 +1,5 @@
 import React from 'react';
+import { HTMLSelect, IHTMLSelectProps } from '@blueprintjs/core';
 import { Drives, WINDOW } from '../app/interfaces';
 import { DRIVE } from '../constants'
 
@@ -30,21 +31,23 @@ class DrivesDropdown extends React.Component<DrivesDropdownProps, any> {
     public render() {
         return (
             <React.Fragment>
-                <select onChange={e => this.props.onDriveSelect(e.target.value as any)}>
-                    {
-                        Object.keys(this.props.drives)
-                            .map((drive: any) => {
-                                return (
-                                    <option
-                                        disabled={this.shouldDisable(drive)}
-                                        value={drive}
-                                    >
-                                        { this.toDisplayName(drive) }
-                                    </option>
-                                )
-                            })
-                    }
-                </select>
+                
+                    <HTMLSelect onChange={e => this.props.onDriveSelect(e.target.value as any)}>
+                        {
+                            Object.keys(this.props.drives)
+                                .map((drive: any) => {
+                                    return (
+                                        <option
+                                            disabled={this.shouldDisable(drive)}
+                                            value={drive}
+                                        >
+                                            { this.toDisplayName(drive) }
+                                        </option>
+                                    )
+                                })
+                        }
+                    </HTMLSelect>
+                
             </React.Fragment>
         )
     }
