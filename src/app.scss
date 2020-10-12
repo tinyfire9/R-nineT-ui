@@ -1,6 +1,10 @@
 .r-ninet-drives {
     display: flex;
 
+    .r-ninet-drive-button-logout {
+        float: left;
+    }
+
     .r-ninet-left-drive {
         width: 50%;
     }
