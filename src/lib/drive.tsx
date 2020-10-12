@@ -2,6 +2,8 @@ import React from 'react';
 import Breadcrumb from './breadcrumb';
 import DirSelectorView from './dir-selector';
 import { DRIVE, DIRECTORY_TYPE } from '../constants';
+import { Icon, Button, Intent, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 
 interface DriveProps {
     token: string;
@@ -72,6 +74,10 @@ abstract class Drive extends React.Component<DriveProps, any>{
             });
     }
 
+    private onLogout = () => {
+        this.api.logout();
+    }
+
     public render(){
         return (
             <React.Fragment>
@@ -79,6 +85,11 @@ abstract class Drive extends React.Component<DriveProps, any>{
                     breadcrumbItems={this.state.breadcrumbItems}
                     fetchSubDirectories={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
                 />
+                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER}>
+                    <Tooltip content="Logout">
+                        <Icon icon={IconNames.LOG_OUT} onClick={() => this.onLogout()}/>
+                    </Tooltip>
+                </Button>
                 <DirSelectorView
                     currentDirId={this.props.currentDirectoryID}
                     subdirectory={this.state.subDirectories}
