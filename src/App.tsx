@@ -1,9 +1,11 @@
 import React from 'react';
 import App from '../src/app/app';
+import '@blueprintjs/core/lib/css/blueprint.css';
+import './app.scss';
+
 import { BoxAPI } from '../src/service/box/api';
 import { DRIVE } from './constants';
 import DropboxAPI from './service/dropbox/api';
-import './app.scss';
 import GDriveAPI from './service/gdrive/api';
 
 
@@ -23,6 +25,7 @@ class RnineT extends React.Component<any, any> {
         case DRIVE.DROPBOX.toLowerCase(): {
           let dropboxAPI: DropboxAPI = new DropboxAPI();
           dropboxAPI.getAndStoreToken(url.get('code') || '');
+          break;
         }
 
         case DRIVE.GOOGLE_DRIVE.toLowerCase():{
@@ -32,6 +35,7 @@ class RnineT extends React.Component<any, any> {
           let expiresIn = url.get('expires_in') || '';
 
           gDriveAPI.storeToken({ accessToken, expiresIn });
+          break;
         }
       }
     }
