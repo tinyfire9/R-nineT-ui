@@ -17,6 +17,11 @@ abstract class API {
         localStorage.setItem(`${this.drive.toLowerCase()}_token`, JSON.stringify(data));
         window.location.href = window.origin;
     }
+
+    public logout = () => {
+        localStorage.setItem(`${this.drive.toLowerCase()}_token`, '');
+        window.location.href = window.origin;
+    }
 }
 
 export default API;
