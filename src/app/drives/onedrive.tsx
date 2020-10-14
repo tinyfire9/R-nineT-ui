@@ -4,8 +4,10 @@ import Breadcrumb from '../../lib/breadcrumb';
 import API from '../../service/onedrive/api';
 import { DriveDirectory } from '../../interfaces';
 import DirSelectorView from '../../lib/dir-selector';
+import { WINDOW } from '../interfaces';
 
 interface OneDriveProps {
+    window: WINDOW;
     token: string;
     currentDirectoryID: string;
     onCurrentDirectoryIDUpdate(drive: DRIVE, newID: string): any;
@@ -82,6 +84,7 @@ class OneDrive extends React.Component<OneDriveProps, OneDriveState> {
                         fetchSubDirectories={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
                     />
                     <DirSelectorView
+                        window={this.props.window}
                         currentDirId={this.props.currentDirectoryID}
                         subdirectory={this.state.subDirectories}
                         fetchSubDirectories={(id: string, name: string, type: DIRECTORY_TYPE) => this.fetchSubDirectories(id, name, type)}
