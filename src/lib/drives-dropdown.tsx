@@ -28,11 +28,20 @@ class DrivesDropdown extends React.Component<DrivesDropdownProps, any> {
         return this.props.leftWindowDrive == drive || this.props.rightWindowDrive == drive;
     }
 
+    private getHTMLSelectValue(){
+        let { window, leftWindowDrive, rightWindowDrive } = this.props;
+
+        if(window === WINDOW.LEFT){
+            return leftWindowDrive;
+        } else if (window === WINDOW.RIGHT){
+            return rightWindowDrive;
+        }
+    }
+
     public render() {
         return (
             <React.Fragment>
-                
-                    <HTMLSelect onChange={e => this.props.onDriveSelect(e.target.value as any)}>
+                    <HTMLSelect value={this.getHTMLSelectValue()} onChange={e => this.props.onDriveSelect(e.target.value as any)}>
                         {
                             Object.keys(this.props.drives)
                                 .map((drive: any) => {
