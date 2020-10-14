@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { DRIVE } from '../constants'
-import { AuthData } from '../app/interfaces';
+import { AuthData, WINDOW } from '../app/interfaces';
 import { DRIVE_COMPONENTS } from '../drive-components';
 
 interface DriveWindowProps {
+    window: WINDOW;
     drive: DRIVE;
     token: string;
     currentDirectoryID: string;
@@ -14,13 +15,14 @@ interface DriveWindowProps {
 
 class DriveWindow extends Component<DriveWindowProps, any> {
     public render() {
-        let { drive, token, currentDirectoryID } = this.props;
+        let { window, drive, token, currentDirectoryID } = this.props;
         let Drive = DRIVE_COMPONENTS[drive].dirSelectorComponent;
         let Auth = DRIVE_COMPONENTS[drive].authComponent;
 
         return (
             this.props.token ?
             <Drive
+                window={window}
                 token={token}
                 onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.props.onCurrentDirectoryIDUpdate(drive, newID)}
                 currentDirectoryID={currentDirectoryID}
