@@ -35,7 +35,7 @@ class GDriveAPI extends API{
                         type: mimeType.includes('folder') ? DIRECTORY_TYPE.DIRECTORY : DIRECTORY_TYPE.FILE,
                     }));
 
-                    resolve({ nextPageToken: res.nextPageToken, files: subDir });
+                    resolve(subDir);
                 }, (error: any) => {
                     console.log(error);
                     reject(error);
