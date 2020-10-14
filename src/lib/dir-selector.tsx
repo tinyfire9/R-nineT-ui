@@ -1,10 +1,13 @@
 import React from 'react';
 import { DriveDirectory } from '../interfaces';
 import { DIRECTORY_TYPE } from '../constants';
-import { HTMLTable, Checkbox, Icon, Intent } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { HTMLTable, Checkbox, Icon, Intent, Card, Button, Tab } from '@blueprintjs/core';
+import { IconNames, IconName } from '@blueprintjs/icons';
+import { ICON_LARGE } from '@blueprintjs/core/lib/esm/common/classes';
+import { WINDOW } from '../app/interfaces';
 
 interface DirSelectorViewProps {
+    window: WINDOW;
     currentDirId: string;
     subdirectory: DriveDirectory[];
     fetchSubDirectories(id: string, name: string, type: DIRECTORY_TYPE): any;
@@ -109,12 +112,14 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
 
     public render() {
         let selected_subdirectories = this.getSelectedDirectories();
+        let icon:IconName = this.props.window === WINDOW.LEFT ? IconNames.CIRCLE_ARROW_RIGHT : IconNames.CIRCLE_ARROW_LEFT;
 
         return (
-            <React.Fragment>
-                <button onClick={() => this.props.transferDirectories(selected_subdirectories)}>
-                    Transfer {selected_subdirectories.length} items >  
-                </button>
+            <Card style={{overflow: 'auto', height: window.outerHeight*.60}}>
+                <Button className={`r-ninet-${this.props.window}-drive-transfer-button`} onClick={() => this.props.transferDirectories(selected_subdirectories)}>
+                    <Icon icon={icon} intent={Intent.PRIMARY} iconSize={20}/>
+                </Button>
+                
                 <HTMLTable className="drive-dir-selector-table" style={{border: 'black'}}>
                     <thead>
                         <tr>
@@ -134,7 +139,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 </HTMLTable>
                 {this.props.currentDirId ? <button onClick={() => this.props.fetchNextPage()}>Load more ⬇️ </button> : ''}
                 <br/>
-            </React.Fragment>
+            </Card>
         );
     }
 }
