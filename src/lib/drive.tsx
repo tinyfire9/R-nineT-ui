@@ -4,23 +4,34 @@ import DirSelectorView from './dir-selector';
 import { DRIVE, DIRECTORY_TYPE } from '../constants';
 import { Icon, Button, Intent, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import API from '../service/api';
+import { DriveDirectory } from '../interfaces';
+import { WINDOW } from '../app/interfaces';
 
 interface DriveProps {
     token: string;
+    window: WINDOW;
     currentDirectoryID: string;
     onTransferRequest(srcDrive: DRIVE, selectedItems: any): any;
     onCurrentDirectoryIDUpdate(drive: DRIVE, newID: string): any;
 }
 
 abstract class Drive extends React.Component<DriveProps, any>{
-    abstract api: any;
+    abstract api: API;
     abstract rootDirectoryID: string;
     abstract drive: DRIVE;
-    abstract fetchNextPage:() => any;
 
     constructor(props: DriveProps) {
         super(props);
         this.state = this.createInitialState();
+    }
+
+    public componentDidMount() {
+        this.api.fetchSubDirectories(this.props.token, this.rootDirectoryID)
+            .then((subDirectories: any) => {
+                let state = this.createInitialState();
+                this.setState({...state, ... { subDirectories }});
+            });
     }
 
     private createInitialState = () => ({
@@ -28,11 +39,7 @@ abstract class Drive extends React.Component<DriveProps, any>{
         breadcrumbItems: [this.makeRootBreadcrumb()]
     });
 
-    private makeRootBreadcrumb = () => ({id: this.rootDirectoryID || '', name: 'Drive', type: DIRECTORY_TYPE.DIRECTORY });
-
-    private fetchSubDriectories(id: string, name: string, type: DIRECTORY_TYPE) {
-        this.api.fetchSubDirectories(this.props.token, id, )
-    }
+    private makeRootBreadcrumb = () => ({id: this.rootDirectoryID, name: 'Drive', type: DIRECTORY_TYPE.DIRECTORY });
 
     private updateBreadCrumb(id: string) {
         let breadcrumbItems = [...this.state.breadcrumbItems];
@@ -43,24 +50,28 @@ abstract class Drive extends React.Component<DriveProps, any>{
         }
     
         return breadcrumbItems;
-      }
+    }
     
-      private fetchSubDirectoriesFromBreadcumb(directoryID: string) {
+    private fetchSubDirectoriesFromBreadcumb(directoryID: string) {
         this.api.fetchSubDirectories(this.props.token, directoryID)
-          .then((res: any) => {
-            this.props.onCurrentDirectoryIDUpdate(this.drive, directoryID);
+            .then((res: any) => {
+                this.props.onCurrentDirectoryIDUpdate(this.drive, directoryID);
 
-            this.setState({
-              subDirectories: res,
-              breadcrumbItems: this.updateBreadCrumb(directoryID),
+                this.setState({
+                    subDirectories: res,
+                    breadcrumbItems: this.updateBreadCrumb(directoryID),
+                });
             });
-          });
-      }
+    }
 
+    public fetchNextPage() {
+        this.api.fetchNextPage(this.props.token, this.props.currentDirectoryID)
+            .then((nextPage: DriveDirectory[]) => {                
+                let newState = { ...this.state };
+                newState.subDirectories = [...this.state.subDirectories, ...nextPage];
 
-    public componentDidMount() {
-        this.api.fetchSubDirectories(this.props.token, this.rootDirectoryID)
-            .then((subDirectories: any) => this.setState({...this.state, ... { subDirectories }}));
+                this.setState(newState);
+            });
     }
 
     private fetchSubDirectories(id: string, name: string, type: DIRECTORY_TYPE) {
@@ -85,12 +96,14 @@ abstract class Drive extends React.Component<DriveProps, any>{
                     breadcrumbItems={this.state.breadcrumbItems}
                     fetchSubDirectories={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
                 />
-                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER}>
+                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER} onClick={() => this.onLogout()}>
                     <Tooltip content="Logout">
-                        <Icon icon={IconNames.LOG_OUT} onClick={() => this.onLogout()}/>
+                        <Icon icon={IconNames.LOG_OUT}/>
                     </Tooltip>
                 </Button>
+                <br/>
                 <DirSelectorView
+                    window={this.props.window}
                     currentDirId={this.props.currentDirectoryID}
                     subdirectory={this.state.subDirectories}
                     fetchSubDirectories={(id: string, name: string, type: DIRECTORY_TYPE) => this.fetchSubDirectories(id, name, type)}
