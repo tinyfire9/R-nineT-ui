@@ -5,6 +5,7 @@ import DrivesDropdown from '../lib/drives-dropdown';
 import DriveWindow from '../lib/drive-window';
 import axios from 'axios';
 import DropboxAPI from '../service/dropbox/api';
+import { Card } from '@blueprintjs/core';
 
 interface TransferData {
     selectedItems?: any;
@@ -33,12 +34,37 @@ class App extends React.Component <any, AppState> {
     constructor(props: any) {
         super(props);
 
+        let { leftWindowDrive, rightWindowDrive } = this.getWindowStateFromLocalStorage();
+
         this.state = {
-            leftWindowDrive: DRIVE.UNDEFINED,
-            rightWindowDrive: DRIVE.UNDEFINED,
+            leftWindowDrive,
+            rightWindowDrive,
             drives: this.initDrivesState(),
             transfer_sessions: []
         }
+    }
+
+    private saveWindowStateOnLocalStorage(state: AppState) {
+        localStorage.setItem('r-ninet-window-state', JSON.stringify({
+            leftWindowDrive: state.leftWindowDrive,
+            rightWindowDrive: state.rightWindowDrive
+        }));
+    }
+
+    private getWindowStateFromLocalStorage() {
+        let windowStateStr = localStorage.getItem('r-ninet-window-state') || '{}';
+        if(windowStateStr === '{}'){
+            return {
+                leftWindowDrive: DRIVE.UNDEFINED,
+                rightWindowDrive: DRIVE.UNDEFINED
+            }
+        }
+
+        let windowState = JSON.parse(windowStateStr);
+        return {
+            leftWindowDrive: windowState.leftWindowDrive,
+            rightWindowDrive: windowState.rightWindowDrive
+        };
     }
 
     private getAuthDataFromLocalStorage(drive: string): AuthData{
@@ -169,6 +195,7 @@ class App extends React.Component <any, AppState> {
             newState.rightWindowDrive = drive;
         }
 
+        this.saveWindowStateOnLocalStorage(newState);
         this.setState(newState);
     }
 
@@ -176,7 +203,7 @@ class App extends React.Component <any, AppState> {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
 
         return(
-            <div className="r-ninet-drives">
+            <div className="r-ninet-drives" >
                 <div className="r-ninet-left-drive">
                     <DrivesDropdown
                         window={WINDOW.LEFT}
@@ -189,6 +216,7 @@ class App extends React.Component <any, AppState> {
                     {
                         leftWindowDrive !== DRIVE.UNDEFINED ?
                             <DriveWindow
+                                window={WINDOW.LEFT}
                                 drive={leftWindowDrive}
                                 token={drives[leftWindowDrive].authData.token}
                                 currentDirectoryID={drives[leftWindowDrive].currentDirectoryID}
@@ -211,6 +239,7 @@ class App extends React.Component <any, AppState> {
                     {
                         rightWindowDrive !== DRIVE.UNDEFINED ? 
                             <DriveWindow
+                                window={WINDOW.RIGHT}
                                 drive={rightWindowDrive}
                                 token={drives[rightWindowDrive].authData.token}
                                 currentDirectoryID={drives[rightWindowDrive].currentDirectoryID}
