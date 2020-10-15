@@ -4,25 +4,30 @@ body {
 
 .r-ninet-drives {
     display: flex;
-    padding-left: 5%;
+    margin-top: 2%;
 
     .r-ninet-drive-button-logout {
+        float: right;
+    }
+
+    .r-ninet-drives-dropdown-list{
         float: left;
     }
 
     .r-ninet-left-drive {
-        width: 43%;
+        width: 45%;
+        margin-left: 3%;
 
         .r-ninet-left-drive-transfer-button{
             float: right;
-            margin-top: 45%;
+            margin-top: 43%;
         }
     }
 
     .r-ninet-right-drive {
-        width: 48%;
+        width: 45%;
         float: right;
-        padding-left: 3%;
+        margin-left: 4%;
 
         .r-ninet-right-drive-transfer-button{
             float: left;
