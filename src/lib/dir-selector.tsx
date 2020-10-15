@@ -115,7 +115,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
         let icon:IconName = this.props.window === WINDOW.LEFT ? IconNames.CIRCLE_ARROW_RIGHT : IconNames.CIRCLE_ARROW_LEFT;
 
         return (
-            <Card style={{overflow: 'auto', height: window.outerHeight*.60}}>
+            <div>
                 <Button className={`r-ninet-${this.props.window}-drive-transfer-button`} onClick={() => this.props.transferDirectories(selected_subdirectories)}>
                     <Icon icon={icon} intent={Intent.PRIMARY} iconSize={20}/>
                 </Button>
@@ -139,7 +139,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 </HTMLTable>
                 {this.props.currentDirId ? <button onClick={() => this.props.fetchNextPage()}>Load more ⬇️ </button> : ''}
                 <br/>
-            </Card>
+            </div>
         );
     }
 }
