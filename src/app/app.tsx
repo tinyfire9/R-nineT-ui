@@ -5,7 +5,8 @@ import DrivesDropdown from '../lib/drives-dropdown';
 import DriveWindow from '../lib/drive-window';
 import axios from 'axios';
 import DropboxAPI from '../service/dropbox/api';
-import { Card } from '@blueprintjs/core';
+import { Card, Button, Tooltip, Icon, Intent } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 
 interface TransferData {
     selectedItems?: any;
@@ -199,20 +200,49 @@ class App extends React.Component <any, AppState> {
         this.setState(newState);
     }
 
+    private onLogout(drive: DRIVE) {
+        localStorage.setItem(`${drive.toLowerCase()}_token`, '');
+        window.location.href = window.origin;
+    }
+
+    private isLoggedIn(drive: DRIVE){
+        let tokenObjectStr = localStorage.getItem(`${drive.toLowerCase()}_token`);
+        if(tokenObjectStr === '' || tokenObjectStr === '{}' || tokenObjectStr === null){
+            return false;
+        }
+
+        let tokenObject = JSON.parse(tokenObjectStr);
+        if(tokenObject.accessToken === null || tokenObject.accessToken === ''){
+            return false;
+        }
+
+        return true;
+    }
+
     public render() {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
 
         return(
             <div className="r-ninet-drives" >
-                <div className="r-ninet-left-drive">
-                    <DrivesDropdown
-                        window={WINDOW.LEFT}
-                        leftWindowDrive={this.state.leftWindowDrive}
-                        rightWindowDrive={this.state.rightWindowDrive}
-                        drives={this.state.drives}
-                        onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.LEFT)}
-                    />
-                    <br />
+                <Card className="r-ninet-left-drive" style={{overflow: 'auto', minHeight: window.innerHeight*.65}}>
+                    <div className="r-ninet-left-drive-menu-bar">
+                        {
+                            this.isLoggedIn(leftWindowDrive) ?
+                                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER} onClick={() => this.onLogout(leftWindowDrive)}>
+                                    <Tooltip content="Logout">
+                                        <Icon icon={IconNames.LOG_OUT}/>
+                                    </Tooltip>
+                                </Button>:
+                                ''
+                        }
+                        <DrivesDropdown
+                            window={WINDOW.LEFT}
+                            leftWindowDrive={this.state.leftWindowDrive}
+                            rightWindowDrive={this.state.rightWindowDrive}
+                            drives={this.state.drives}
+                            onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.LEFT)}
+                        />
+                    </div>
                     {
                         leftWindowDrive !== DRIVE.UNDEFINED ?
                             <DriveWindow
@@ -226,16 +256,26 @@ class App extends React.Component <any, AppState> {
                             /> : 
                             ''
                     }
-                </div>
-                <div className="r-ninet-right-drive">
-                    <DrivesDropdown
-                        window={WINDOW.RIGHT}
-                        leftWindowDrive={this.state.leftWindowDrive}
-                        rightWindowDrive={this.state.rightWindowDrive}
-                        drives={this.state.drives}
-                        onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.RIGHT)}
-                    />
-                    <br />
+                </Card>
+                <Card className="r-ninet-right-drive" style={{overflow: 'auto', minHeight: window.innerHeight*.85}}>
+                    <div className="r-ninet-left-drive-menu-bar">
+                        {
+                            this.isLoggedIn(rightWindowDrive) ? 
+                                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER} onClick={() => this.onLogout(rightWindowDrive)}>
+                                    <Tooltip content="Logout">
+                                        <Icon icon={IconNames.LOG_OUT}/>
+                                    </Tooltip>
+                                </Button>: 
+                                ''
+                        }
+                        <DrivesDropdown
+                            window={WINDOW.RIGHT}
+                            leftWindowDrive={this.state.leftWindowDrive}
+                            rightWindowDrive={this.state.rightWindowDrive}
+                            drives={this.state.drives}
+                            onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, WINDOW.RIGHT)}
+                        />
+                    </div>
                     {
                         rightWindowDrive !== DRIVE.UNDEFINED ? 
                             <DriveWindow
@@ -250,7 +290,7 @@ class App extends React.Component <any, AppState> {
                             ''
 
                     }
-                </div>
+                </Card>
             </div>
         )
     }
