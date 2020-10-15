@@ -41,7 +41,11 @@ class DrivesDropdown extends React.Component<DrivesDropdownProps, any> {
     public render() {
         return (
             <React.Fragment>
-                    <HTMLSelect value={this.getHTMLSelectValue()} onChange={e => this.props.onDriveSelect(e.target.value as any)}>
+                    <HTMLSelect
+                        className="r-ninet-drives-dropdown-list"
+                        value={this.getHTMLSelectValue()}
+                        onChange={e => this.props.onDriveSelect(e.target.value as any)}
+                    >
                         {
                             Object.keys(this.props.drives)
                                 .map((drive: any) => {
