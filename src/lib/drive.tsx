@@ -85,10 +85,6 @@ abstract class Drive extends React.Component<DriveProps, any>{
             });
     }
 
-    private onLogout = () => {
-        this.api.logout();
-    }
-
     public render(){
         return (
             <React.Fragment>
@@ -96,11 +92,6 @@ abstract class Drive extends React.Component<DriveProps, any>{
                     breadcrumbItems={this.state.breadcrumbItems}
                     fetchSubDirectories={(id: string) => this.fetchSubDirectoriesFromBreadcumb(id)}
                 />
-                <Button className="r-ninet-drive-button-logout" intent={Intent.DANGER} onClick={() => this.onLogout()}>
-                    <Tooltip content="Logout">
-                        <Icon icon={IconNames.LOG_OUT}/>
-                    </Tooltip>
-                </Button>
                 <br/>
                 <DirSelectorView
                     window={this.props.window}
