@@ -7,6 +7,8 @@ import { BoxAPI } from '../src/service/box/api';
 import { DRIVE } from './constants';
 import DropboxAPI from './service/dropbox/api';
 import GDriveAPI from './service/gdrive/api';
+import { Navbar, Button, Alignment, Icon, Colors } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 
 
 class RnineT extends React.Component<any, any> {
@@ -43,10 +45,26 @@ class RnineT extends React.Component<any, any> {
 
   public render() {
     return (
-      <div className="r-ninet" style={{ textAlign: "center" }}>
-        <h1>R nineT</h1>
-        <App />
-      </div>
+      <React.Fragment>
+        <Navbar className="r-ninet-nav-bar">
+          <Navbar.Group align={Alignment.LEFT}>
+            <Navbar.Heading>
+              <Icon color={Colors.BLUE2} iconSize={40} icon={IconNames.CLOUD}/>
+              {/* <span style={{fontSize: '25px', paddingLeft: '15px'}}>R nineT</span> */}
+            </Navbar.Heading>
+          </Navbar.Group>
+            <Navbar.Group align={Alignment.RIGHT}>
+              <Button minimal={true}>Home</Button>
+              <Navbar.Divider/>
+              <Button minimal={true}>Status</Button>
+              <Navbar.Divider/>
+              <Button minimal={true}>Notifications <Icon icon={IconNames.SYMBOL_TRIANGLE_DOWN} /></Button>
+            </Navbar.Group>
+        </Navbar>
+        <div className="r-ninet" style={{ textAlign: "center" }}>
+          <App />
+        </div>
+      </React.Fragment>
     );
   }
 }
