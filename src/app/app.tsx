@@ -77,7 +77,7 @@ class App extends React.Component <any, AppState> {
             expiration_time: 0,
         };
 
-        let data: any = JSON.parse(localStorage.getItem(`${drive}_TOKEN`.toLocaleLowerCase()) || '{}');
+        let data: any = JSON.parse(localStorage.getItem(`${drive}_token`) || '{}');
         if(!data || data === null){
             return authData;
         }
@@ -99,9 +99,10 @@ class App extends React.Component <any, AppState> {
             [`${DRIVE.BOX}`]: '0',
             [`${DRIVE.DROPBOX}`]: '',
         }
-        for( let drive in DRIVE) {
-            drives[drive.toLocaleLowerCase()] = {
-                drive: drive.toLowerCase(),
+        for( let driveItem in DRIVE) {
+            let drive = driveItem.toLowerCase();
+            drives[drive] = {
+                drive,
                 authData: this.getAuthDataFromLocalStorage(drive),
                 currentDirectoryID: rootDirectoryID[drive],
             }
@@ -221,10 +222,18 @@ class App extends React.Component <any, AppState> {
 
     public render() {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
+        let height = window.innerHeight*.85;
+        let cardStyle = {
+            overflow: 'auto',
+            minHeight: height,
+            maxHeight: height
+        }
+
+        console.log(this.state)
 
         return(
             <div className="r-ninet-drives" >
-                <Card className="r-ninet-left-drive" style={{overflow: 'auto', minHeight: window.innerHeight*.65}}>
+                <Card className="r-ninet-left-drive" style={cardStyle}>
                     <div className="r-ninet-left-drive-menu-bar">
                         {
                             this.isLoggedIn(leftWindowDrive) ?
@@ -257,7 +266,7 @@ class App extends React.Component <any, AppState> {
                             ''
                     }
                 </Card>
-                <Card className="r-ninet-right-drive" style={{overflow: 'auto', minHeight: window.innerHeight*.85}}>
+                <Card className="r-ninet-right-drive" style={cardStyle}>
                     <div className="r-ninet-left-drive-menu-bar">
                         {
                             this.isLoggedIn(rightWindowDrive) ? 
