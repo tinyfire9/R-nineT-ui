@@ -1,7 +1,7 @@
-import { GDrive, OneDrive, Box } from './app/drives';
+import { GDrive, OneDrive, Box } from './app/transfer/drives';
 import { GDriveAuth, OneDriveAuth, BoxAuth, DropboxAuth } from './auth';
 import { DRIVE } from './constants'
-import Dropbox from './app/drives/dropbox';
+import Dropbox from './app/transfer/drives/dropbox';
 
 interface DriveComponents {
     authComponent:  typeof GDriveAuth | typeof OneDriveAuth | typeof BoxAuth | typeof DropboxAuth;

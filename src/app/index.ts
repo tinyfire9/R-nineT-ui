@@ -1,3 +1,3 @@
-import App from './app'
+import TransferView from './transfer/transfer'
 
-export { App };
+export { TransferView };

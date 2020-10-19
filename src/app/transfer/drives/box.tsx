@@ -1,7 +1,7 @@
 import React from 'react';
-import { BoxAPI } from '../../service/box/api'
-import { DRIVE } from '../../constants';
-import Drive from '../../lib/drive';
+import { BoxAPI } from '../../../service/box/api'
+import { DRIVE } from '../../../constants';
+import Drive from '../../../lib/drive';
 
 class Box extends Drive {
     drive: DRIVE = DRIVE.BOX;

@@ -1,10 +1,10 @@
 import React from 'react';
-import { DRIVE, DIRECTORY_TYPE } from '../../constants'
-import Breadcrumb from '../../lib/breadcrumb';
-import API from '../../service/onedrive/api';
-import { DriveDirectory } from '../../interfaces';
-import DirSelectorView from '../../lib/dir-selector';
-import { WINDOW } from '../interfaces';
+import { DRIVE, DIRECTORY_TYPE } from '../../../constants'
+import Breadcrumb from '../../../lib/breadcrumb';
+import API from '../../../service/onedrive/api';
+import { DriveDirectory } from '../../../interfaces';
+import DirSelectorView from '../../../lib/dir-selector';
+import { WINDOW } from '../../interfaces';
 
 interface OneDriveProps {
     window: WINDOW;

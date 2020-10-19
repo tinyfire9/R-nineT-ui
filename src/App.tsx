@@ -1,5 +1,5 @@
 import React from 'react';
-import App from '../src/app/app';
+import TransferView from '../src/app/transfer/transfer';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import './app.scss';
 
@@ -62,7 +62,7 @@ class RnineT extends React.Component<any, any> {
             </Navbar.Group>
         </Navbar>
         <div className="r-ninet" style={{ textAlign: "center" }}>
-          <App />
+          <TransferView />
         </div>
       </React.Fragment>
     );
