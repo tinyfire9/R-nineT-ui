@@ -19,24 +19,23 @@ body {
         float: left;
     }
 
+    .r-ninet-drives-transfer-buttons{
+        margin: 1%;
+        display: grid;
+        height: fit-content;
+
+        .r-ninet-right-drive-transfer-button{
+            margin-top: 35%;
+        }
+    }
+
     .r-ninet-left-drive {
         width: 45%;
-        margin-left: 3%;
-
-        .r-ninet-left-drive-transfer-button{
-            float: right;
-            margin-top: 43%;
-        }
+        margin-left: 1%;
     }
 
     .r-ninet-right-drive {
         width: 45%;
         float: right;
-        margin-left: 4%;
-
-        .r-ninet-right-drive-transfer-button{
-            float: left;
-            margin-top: 43%;
-        }
     }
 }
