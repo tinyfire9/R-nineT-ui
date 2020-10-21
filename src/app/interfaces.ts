@@ -22,6 +22,7 @@ export interface DriveState {
     drive: DRIVE;
     authData: AuthData,
     currentDirectoryID: string;
+    selectedItems: string[];
 }
 
 export interface TransferSession {
