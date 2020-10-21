@@ -12,7 +12,7 @@ interface DriveProps {
     token: string;
     window: WINDOW;
     currentDirectoryID: string;
-    onTransferRequest(srcDrive: DRIVE, selectedItems: any): any;
+    onSelectedItemsUpdate(srcDrive: DRIVE, selectedItems: any): any;
     onCurrentDirectoryIDUpdate(drive: DRIVE, newID: string): any;
 }
 
@@ -98,7 +98,7 @@ abstract class Drive extends React.Component<DriveProps, any>{
                     currentDirId={this.props.currentDirectoryID}
                     subdirectory={this.state.subDirectories}
                     fetchSubDirectories={(id: string, name: string, type: DIRECTORY_TYPE) => this.fetchSubDirectories(id, name, type)}
-                    transferDirectories={(selectedItems: string[]) => this.props.onTransferRequest(this.drive, selectedItems)}
+                    onSelectedItemsUpdate={(selectedItems: string[]) => this.props.onSelectedItemsUpdate(this.drive, selectedItems)}
                     fetchNextPage={() => this.fetchNextPage()}
                 />
             </React.Fragment>
