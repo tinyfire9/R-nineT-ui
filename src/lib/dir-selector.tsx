@@ -11,7 +11,7 @@ interface DirSelectorViewProps {
     currentDirId: string;
     subdirectory: DriveDirectory[];
     fetchSubDirectories(id: string, name: string, type: DIRECTORY_TYPE): any;
-    transferDirectories(dirs: string[]): any;
+    onSelectedItemsUpdate(dirs: string[]): any;
     fetchNextPage(): any;
 }
 
@@ -51,6 +51,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 select_all_active: false,
                 selected_subdirectories: {},
             });
+            this.props.onSelectedItemsUpdate([]);
         }  else {
             let selected_subdirectories: any = {};
             this.props.subdirectory.forEach(({ id }: any) => {
@@ -60,6 +61,8 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                 select_all_active: true,
                 selected_subdirectories, 
             });
+
+            this.props.onSelectedItemsUpdate(Object.keys(selected_subdirectories));
         }
     }
 
@@ -69,6 +72,8 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
         let newState: DirSelectorViewState = { ...this.state };
         newState.selected_subdirectories[id] = !selected_subdirectories[id] ? true : false;
         this.setState(newState);
+
+        this.props.onSelectedItemsUpdate(this.getSelectedDirectories())
     }
 
     private getSelectedDirectories(){
@@ -115,11 +120,7 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
         let icon:IconName = this.props.window === WINDOW.LEFT ? IconNames.CIRCLE_ARROW_RIGHT : IconNames.CIRCLE_ARROW_LEFT;
 
         return (
-            <div>
-                <Button className={`r-ninet-${this.props.window}-drive-transfer-button`} onClick={() => this.props.transferDirectories(selected_subdirectories)}>
-                    <Icon icon={icon} intent={Intent.PRIMARY} iconSize={20}/>
-                </Button>
-                
+            <div>                
                 <HTMLTable className="drive-dir-selector-table" style={{border: 'black'}}>
                     <thead>
                         <tr>
@@ -137,7 +138,6 @@ class DirSelectorView extends React.Component<DirSelectorViewProps, DirSelectorV
                         { this.makeTableRows() }
                     </tbody>
                 </HTMLTable>
-                {this.props.currentDirId ? <button onClick={() => this.props.fetchNextPage()}>Load more ⬇️ </button> : ''}
                 <br/>
             </div>
         );
