@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { IconNames } from '@blueprintjs/icons';
+import { IconNames, IconName } from '@blueprintjs/icons';
 import { Card, Button, Tooltip, Icon, Intent } from '@blueprintjs/core';
 
 import { DriveState, AuthData, TransferSession, Drives, WINDOW } from './../interfaces';
@@ -47,10 +47,6 @@ class TransferView extends React.Component <any, TransferViewState> {
         }
     }
 
-    public componentDidMount() {
- 
-    }
-
     private initDrivesState() {
         let drives: any = {};
         let rootDirectoryID = {
@@ -65,6 +61,7 @@ class TransferView extends React.Component <any, TransferViewState> {
                 drive,
                 authData: this.localStorageServices.getAuthDataFromLocalStorage(drive),
                 currentDirectoryID: rootDirectoryID[drive],
+                selectedItems: []
             }
         }
 
@@ -105,17 +102,14 @@ class TransferView extends React.Component <any, TransferViewState> {
         let { src, dest } = this.getSrcAndDestDrives(src_drive);
 
         if(!dest) {
-            console.log("Please select a destination drive");
             return;
         }
 
         if(!dest.authData.token) {
-            console.log("Please login to " + dest.drive);
             return;
         }
 
         if(dest.authData.expiration_time <= new Date().getTime()) {
-            console.log("Plese login to " + dest.drive + " again ");
             return;
         }
 
@@ -170,6 +164,39 @@ class TransferView extends React.Component <any, TransferViewState> {
         return this.localStorageServices.isTokenStoredInLocalStorage(drive);
     }
 
+    private onSelectedItemsUpdate(drive: DRIVE, selectedItems: string[]){
+        let newState: TransferViewState = { ...this.state};
+        newState.drives[drive.toLowerCase()].selectedItems = selectedItems;
+        this.setState(newState);
+    }
+
+    private createTransferButton(driveWindow: WINDOW) {
+        const { drives, leftWindowDrive, rightWindowDrive } = this.state;
+        let icon:IconName = driveWindow === WINDOW.LEFT ? IconNames.CIRCLE_ARROW_RIGHT : IconNames.CIRCLE_ARROW_LEFT;
+        let drive = driveWindow === WINDOW.LEFT ? leftWindowDrive : rightWindowDrive;
+        let selectedItems = drives[drive.toLowerCase()].selectedItems;
+        let shouldDisableButton = selectedItems.length === 0 || !this.isLoggedIn(leftWindowDrive) || !this.isLoggedIn(rightWindowDrive);
+
+        let makeButton = () => ( 
+            <Button
+                disabled={shouldDisableButton}
+                className={`r-ninet-${driveWindow.toLowerCase()}-drive-transfer-button`}
+                onClick={() => this.onTransferRequest(drive, selectedItems)}
+            >
+                <Icon icon={icon} intent={Intent.PRIMARY} iconSize={20}/>
+            </Button>
+        );
+
+        return (!shouldDisableButton && selectedItems.length > 0 ?
+            <Tooltip
+                content={`Transfer ${selectedItems.length} item${selectedItems.length > 1 ? 's' : ''}`}
+            >
+                {makeButton()}
+            </Tooltip> :
+            makeButton()
+        );
+    }
+
     private createDriveWindow(driveWindow: WINDOW) {
         let { leftWindowDrive, rightWindowDrive, drives  } = this.state;
 
@@ -210,7 +237,7 @@ class TransferView extends React.Component <any, TransferViewState> {
                             currentDirectoryID={drives[driveOnWindow].currentDirectoryID}
                             onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
                             onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
-                            onTransferRequest={(drive: DRIVE, selectedItems: any) => this.onTransferRequest(drive, selectedItems )}
+                            onSelectedItemsUpdate={(drive: DRIVE, selectedItems: any) => this.onSelectedItemsUpdate(drive, selectedItems )}
                         /> : 
                         ''
                 }
@@ -222,6 +249,10 @@ class TransferView extends React.Component <any, TransferViewState> {
         return(
             <div className="r-ninet-drives" >
                 {this.createDriveWindow(WINDOW.LEFT)}
+                <div className="r-ninet-drives-transfer-buttons" style={{marginTop: window.innerHeight * .40}}>
+                    {this.createTransferButton(WINDOW.LEFT)}
+                    {this.createTransferButton(WINDOW.RIGHT)}
+                </div>
                 {this.createDriveWindow(WINDOW.RIGHT)}
             </div>
         )
