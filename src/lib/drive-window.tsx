@@ -10,7 +10,7 @@ interface DriveWindowProps {
     currentDirectoryID: string;
     onAuthSuccess(drive: DRIVE, authData: AuthData): any;
     onCurrentDirectoryIDUpdate(drive: DRIVE, newID: string): any;
-    onTransferRequest(srcDrive: DRIVE, selectedItems: any): any;
+    onSelectedItemsUpdate(srcDrive: DRIVE, selectedItems: any): any;
 }
 
 class DriveWindow extends Component<DriveWindowProps, any> {
@@ -26,8 +26,8 @@ class DriveWindow extends Component<DriveWindowProps, any> {
                 token={token}
                 onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.props.onCurrentDirectoryIDUpdate(drive, newID)}
                 currentDirectoryID={currentDirectoryID}
-                onTransferRequest={
-                    (srcDrive: DRIVE, selectedItems: any) => this.props.onTransferRequest(srcDrive, selectedItems)
+                onSelectedItemsUpdate={
+                    (srcDrive: DRIVE, selectedItems: any) => this.props.onSelectedItemsUpdate(srcDrive, selectedItems)
                 }
             />: 
             <Auth onAuthSuccess={(drive: DRIVE, authData: AuthData) => this.props.onAuthSuccess(drive, authData)}/>
