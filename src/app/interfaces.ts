@@ -11,11 +11,11 @@ export enum WINDOW {
 }
 
 export interface AuthData {
-    token: string;
-    name: string;
-    image_url: string;
-    email: string;
-    expiration_time: number;
+    accessToken: string;
+    refreshToken: string;
+    tokenType: string;
+    expiresIn: number;
+    expiresAt: number;
 };
 
 export interface DriveState {
