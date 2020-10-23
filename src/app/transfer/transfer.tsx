@@ -105,11 +105,11 @@ class TransferView extends React.Component <any, TransferViewState> {
             return;
         }
 
-        if(!dest.authData.token) {
+        if(!dest.authData.accessToken) {
             return;
         }
 
-        if(dest.authData.expiration_time <= new Date().getTime()) {
+        if(dest.authData.expiresAt > new Date().getTime()) {
             return;
         }
 
@@ -233,7 +233,7 @@ class TransferView extends React.Component <any, TransferViewState> {
                         <DriveWindow
                             window={driveWindow}
                             drive={driveOnWindow}
-                            token={drives[driveOnWindow].authData.token}
+                            token={drives[driveOnWindow].authData.accessToken}
                             currentDirectoryID={drives[driveOnWindow].currentDirectoryID}
                             onAuthSuccess={(drive: DRIVE, authData: any) => this.onAuthSuccess(drive, authData)}
                             onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.onCurrentDirectoryIDUpdate(drive, newID)}
