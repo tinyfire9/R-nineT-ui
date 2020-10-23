@@ -28,11 +28,11 @@ export default class LocalStorageServices {
 
     public getAuthDataFromLocalStorage(drive: string): AuthData{
         let authData: AuthData = {
-            token: '',
-            name: '',
-            email: '',
-            image_url: '',
-            expiration_time: 0,
+            accessToken: '',
+            refreshToken: '',
+            tokenType: '',
+            expiresIn: -1,
+            expiresAt: -1,
         };
 
         let data: any = JSON.parse(localStorage.getItem(`${drive}_token`) || '{}');
@@ -40,11 +40,16 @@ export default class LocalStorageServices {
             return authData;
         }
 
-        authData.token = data['accessToken'];
-        authData.name = data['name'];
-        authData.email = data['email'];
-        authData.image_url = data['imageURL'];
-        authData.expiration_time = data['expirationTime'];
+        if(new Date().getTime() + 1000000 > data['expiresAt'] && data['expiresAt'] != -1) {
+            localStorage.removeItem(`${drive}_token`);
+            return authData;
+        }
+
+        authData.accessToken = data['accessToken'];
+        authData.refreshToken = data['refreshToken'];
+        authData.tokenType = data['tokenType'];
+        authData.expiresIn = data['expiresIn'];
+        authData.expiresAt = data['expiresAt'];
 
         return authData;
     }
