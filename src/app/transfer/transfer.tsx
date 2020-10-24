@@ -228,6 +228,8 @@ class TransferView extends React.Component <any, TransferViewState> {
                         onDriveSelect={(drive: DRIVE) => this.onDriveSelect(drive, driveWindow)}
                     />
                 </div>
+                <br />
+                <br />
                 {
                     driveOnWindow !== DRIVE.UNDEFINED ?
                         <DriveWindow
