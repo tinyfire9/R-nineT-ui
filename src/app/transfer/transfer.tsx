@@ -109,10 +109,6 @@ class TransferView extends React.Component <any, TransferViewState> {
             return;
         }
 
-        if(dest.authData.expiresAt > new Date().getTime()) {
-            return;
-        }
-
         let payload: TransferRequestPayload = {
             src: {
                 drive: src.drive,
