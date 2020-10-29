@@ -25,7 +25,8 @@ class Breadcrumb extends React.Component<BreadCrumbProps, any> {
 
     public render() {
         return (
-            <Breadcrumbs 
+            <Breadcrumbs
+                className="r-ninet-drive-breadcrumb"
                 currentBreadcrumbRenderer={this.renderBreadcrumb}
                 items={this.props.breadcrumbItems.map(({ name, id, type}: BreadCrumbItem) => ({
                         text: name,
