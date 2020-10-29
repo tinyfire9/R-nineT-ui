@@ -1,5 +1,6 @@
 import React from 'react';
-import TransferView from '../src/app/transfer/transfer';
+import { TransferView, StatusView } from './app/index';
+import { Route, Switch, BrowserRouter, Link } from 'react-router-dom';
 import '@blueprintjs/core/lib/css/blueprint.css';
 import './app.scss';
 
@@ -45,26 +46,33 @@ class RnineT extends React.Component<any, any> {
 
   public render() {
     return (
-      <React.Fragment>
+      <BrowserRouter>
         <Navbar className="r-ninet-nav-bar">
           <Navbar.Group align={Alignment.LEFT}>
             <Navbar.Heading>
               <Icon color={Colors.BLUE2} iconSize={40} icon={IconNames.CLOUD}/>
-              {/* <span style={{fontSize: '25px', paddingLeft: '15px'}}>R nineT</span> */}
+              <span style={{fontSize: '25px', paddingLeft: '15px'}}>R nineT</span>
             </Navbar.Heading>
           </Navbar.Group>
             <Navbar.Group align={Alignment.RIGHT}>
-              <Button minimal={true}>Home</Button>
+              <Link to="/"><Button minimal={true}>Home</Button></Link>
               <Navbar.Divider/>
-              <Button minimal={true}>Status</Button>
+              <Link to="/status"><Button minimal={true}>Status</Button></Link>
               <Navbar.Divider/>
               <Button minimal={true}>Notifications <Icon icon={IconNames.SYMBOL_TRIANGLE_DOWN} /></Button>
             </Navbar.Group>
         </Navbar>
         <div className="r-ninet" style={{ textAlign: "center" }}>
-          <TransferView />
+          <Switch>
+            <Route exact path="/">
+              <TransferView />
+            </Route>
+            <Route path="/status">
+              <StatusView />
+            </Route>
+          </Switch>          
         </div>
-      </React.Fragment>
+      </BrowserRouter>
     );
   }
 }
