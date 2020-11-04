@@ -2,9 +2,7 @@ import React from 'react';
 import Breadcrumb from './breadcrumb';
 import DirSelectorView from './dir-selector';
 import { DRIVE, DIRECTORY_TYPE } from '../constants';
-import { Icon, Button, Intent, Tooltip } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import API from '../service/api';
+import API from '../app/transfer/drives/api';
 import { DriveDirectory } from '../interfaces';
 import { WINDOW } from '../app/interfaces';
 
@@ -61,6 +59,7 @@ abstract class Drive extends React.Component<DriveProps, any>{
                     subDirectories: res,
                     breadcrumbItems: this.updateBreadCrumb(directoryID),
                 });
+                this.props.onSelectedItemsUpdate(this.drive, []);
             });
     }
 
@@ -82,6 +81,7 @@ abstract class Drive extends React.Component<DriveProps, any>{
                 newState.subDirectories = subDirectories;
                 newState.breadcrumbItems.push({ id, name, type  });
                 this.setState(newState);
+                this.props.onSelectedItemsUpdate(this.drive, []);
             });
     }
 
