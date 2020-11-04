@@ -3,6 +3,7 @@ import axios from 'axios';
 import { IconNames, IconName } from '@blueprintjs/icons';
 import { Card, Button, Tooltip, Icon, Intent } from '@blueprintjs/core';
 
+import { config } from './drives';
 import { DriveState, AuthData, TransferSession, Drives, WINDOW } from './../interfaces';
 import { DRIVE } from '../../constants';
 import DrivesDropdown from '../../lib/drives-dropdown';
@@ -49,18 +50,12 @@ class TransferView extends React.Component <any, TransferViewState> {
 
     private initDrivesState() {
         let drives: any = {};
-        let rootDirectoryID = {
-            [`${DRIVE.GOOGLE_DRIVE}`]: 'root',
-            [`${DRIVE.ONE_DRIVE}`]: 'root',
-            [`${DRIVE.BOX}`]: '0',
-            [`${DRIVE.DROPBOX}`]: '',
-        }
         for( let driveItem in DRIVE) {
             let drive = driveItem.toLowerCase();
             drives[drive] = {
                 drive,
                 authData: this.localStorageServices.getAuthDataFromLocalStorage(drive),
-                currentDirectoryID: rootDirectoryID[drive],
+                currentDirectoryID: drive === DRIVE.UNDEFINED ? '' : config[drive].dirSelector.rootDirectoryID,
                 selectedItems: []
             }
         }
