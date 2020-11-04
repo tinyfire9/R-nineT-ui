@@ -6,7 +6,7 @@ import { Card, Button, Tooltip, Icon, Intent } from '@blueprintjs/core';
 import { DriveState, AuthData, TransferSession, Drives, WINDOW } from './../interfaces';
 import { DRIVE } from '../../constants';
 import DrivesDropdown from '../../lib/drives-dropdown';
-import DriveWindow from '../../lib/drive-window';
+import DriveWindow from './drive-window';
 import LocalStorageServices from '../local-storage';
 
 interface TransferData {

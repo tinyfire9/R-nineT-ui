@@ -1,5 +1,5 @@
-import { DriveDirectory } from '../../interfaces';
-import { DIRECTORY_TYPE, DRIVE } from '../../constants';
+import { DriveDirectory } from '../../../../interfaces';
+import { DIRECTORY_TYPE, DRIVE } from '../../../../constants';
 import API from '../api';
 
 class OneDriveAPI extends API {
@@ -32,6 +32,13 @@ class OneDriveAPI extends API {
                 .catch((err: Error) => reject(err.message))
         });
     }
+
+
+    public fetchNextPage (token: string, directoryID: string): Promise<DriveDirectory[]>{
+        return new Promise((resolve, reject) => {
+            resolve([]);
+        })
+      }
 }
 
 export default OneDriveAPI;

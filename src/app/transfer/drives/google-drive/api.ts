@@ -1,5 +1,5 @@
-import { DIRECTORY_TYPE, DRIVE } from '../../constants';
-import { DriveDirectory } from '../../interfaces';
+import { DIRECTORY_TYPE, DRIVE } from '../../../../constants';
+import { DriveDirectory } from '../../../../interfaces';
 import API from '../api';
 
 interface GDriveResponse {
@@ -7,10 +7,11 @@ interface GDriveResponse {
     items: DriveDirectory[];
 }
 
-class GDriveAPI extends API{
+class GoogleDrive extends API{
     drive: DRIVE = DRIVE.GOOGLE_DRIVE;
     private uri = "https://www.googleapis.com/drive/v3/files";
-    public fetchSubDirectories(token: string, directory_id?: string, nextPageToken?: string): Promise<DriveDirectory[]> {
+    public fetchSubDirectories(token: string, directory_id: string, nextPageToken: string): Promise<DriveDirectory[]> {
+        this.prevQueryDirectoryID = directory_id;
         let uri = this.uri + '?fields=*&access_token=' + token;
 
         if(directory_id){
@@ -29,6 +30,8 @@ class GDriveAPI extends API{
                         reject(res.error.message);
                         return;
                     }
+
+                    this.nextpageToken = res.nextPageToken;
                     let subDir: DriveDirectory[] = res.files.map(({ name, id, mimeType }: any) => ({
                         name,
                         id,
@@ -42,6 +45,21 @@ class GDriveAPI extends API{
                 });
         });
     }
+
+    public fetchNextPage (token: string, directoryID: string): Promise<DriveDirectory[]>{
+        return new Promise((resolve, reject) => {
+            if((this.nextpageToken == null) || (this.nextpageToken == '') || (this.prevQueryDirectoryID != '' && this.prevQueryDirectoryID != directoryID)) {
+                this.nextpageToken = '';
+                return;
+            }
+
+            this.fetchSubDirectories(token, directoryID, this.nextpageToken)
+                .then((res: any) => {
+                    resolve(res);
+                })
+                .catch(e => reject(e));
+        })
+      }
 }
 
-export default GDriveAPI;
+export default GoogleDrive;

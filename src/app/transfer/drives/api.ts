@@ -1,6 +1,6 @@
 import Axios, { AxiosResponse } from 'axios';
-import { DRIVE } from '../constants';
-import { DriveDirectory } from '../interfaces';
+import { DRIVE } from '../../../constants';
+import { DriveDirectory } from '../../../interfaces';
 
 abstract class API {
     abstract drive: DRIVE;

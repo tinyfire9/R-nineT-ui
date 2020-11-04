@@ -56,7 +56,7 @@ export default class LocalStorageServices {
 
     public isTokenStoredInLocalStorage(drive: DRIVE){
         let tokenObjectStr = localStorage.getItem(`${drive.toLowerCase()}_token`);
-        if(tokenObjectStr === '' || tokenObjectStr === '{}' || tokenObjectStr === null){
+        if(tokenObjectStr === '' || tokenObjectStr === '{}' || tokenObjectStr === null || tokenObjectStr === 'null'){
             return false;
         }
 

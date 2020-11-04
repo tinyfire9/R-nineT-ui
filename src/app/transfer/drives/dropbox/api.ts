@@ -1,12 +1,12 @@
 import API from "../api";
-import { DRIVE, DIRECTORY_TYPE } from "../../constants";
-import { DriveDirectory } from "../../interfaces";
+import { DRIVE, DIRECTORY_TYPE } from "../../../../constants";
+import { DriveDirectory } from "../../../../interfaces";
 import Axios, { AxiosResponse, AxiosError } from "axios";
 
 class DropboxAPI extends API {
     drive:DRIVE = DRIVE.DROPBOX;
 
-    public fetchSubDirectories(token: string, directoryID: string): Promise<DriveDirectory[]>{
+    public fetchSubDirectories(token: string, directoryID: string, nextPageToken?: string): Promise<DriveDirectory[]>{
         return new Promise((resolve, reject) => {
             let url = "https://api.dropboxapi.com/2/files/list_folder";
 
@@ -31,6 +31,12 @@ class DropboxAPI extends API {
             });
         });
     }
+
+    public fetchNextPage (token: string, directoryID: string): Promise<DriveDirectory[]>{
+        return new Promise((resolve, reject) => {
+            resolve([]);
+        })
+      }
 }
 
 export default DropboxAPI;

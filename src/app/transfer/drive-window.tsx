@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { DRIVE } from '../constants'
-import { AuthData, WINDOW } from '../app/interfaces';
-import { DRIVE_COMPONENTS } from '../drive-components';
+
+import { config } from './drives';
+import { DriveConfig } from './drives/interfaces';
+import API from './drives/api';
+
+import { DRIVE } from '../../constants'
+import { AuthData, WINDOW } from '../../app/interfaces';
+import Drive from '../../lib/drive';
+import Login from '../../lib/login';
 
 interface DriveWindowProps {
     window: WINDOW;
@@ -14,14 +20,30 @@ interface DriveWindowProps {
 }
 
 class DriveWindow extends Component<DriveWindowProps, any> {
+    private DriveDirSelector = null as any;
+    public getDriveDirectorySelector = () => {
+        if(this.DriveDirSelector == null){
+            let drive: DRIVE = this.props.drive;
+            let driveConfig: DriveConfig = config[drive];
+            class DriveDirSelector extends Drive {
+                drive: DRIVE = drive;
+                api: API = driveConfig.dirSelector.api;
+                rootDirectoryID: string = driveConfig.dirSelector.rootDirectoryID
+            }
+
+            this.DriveDirSelector = DriveDirSelector;
+        }
+
+        return this.DriveDirSelector;
+    }
+
     public render() {
+        let DriveDirSelector = this.getDriveDirectorySelector();
         let { window, drive, token, currentDirectoryID } = this.props;
-        let Drive = DRIVE_COMPONENTS[drive].dirSelectorComponent;
-        let Auth = DRIVE_COMPONENTS[drive].authComponent;
 
         return (
             this.props.token ?
-            <Drive
+            <DriveDirSelector
                 window={window}
                 token={token}
                 onCurrentDirectoryIDUpdate={(drive: DRIVE, newID: string) => this.props.onCurrentDirectoryIDUpdate(drive, newID)}
@@ -30,7 +52,7 @@ class DriveWindow extends Component<DriveWindowProps, any> {
                     (srcDrive: DRIVE, selectedItems: any) => this.props.onSelectedItemsUpdate(srcDrive, selectedItems)
                 }
             />: 
-            <Auth onAuthSuccess={(drive: DRIVE, authData: AuthData) => this.props.onAuthSuccess(drive, authData)}/>
+            <Login config={config[drive]}/>
         );
     }
 }

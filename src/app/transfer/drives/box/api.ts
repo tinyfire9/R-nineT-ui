@@ -1,5 +1,5 @@
-import { DriveDirectory } from '../../interfaces';
-import { DIRECTORY_TYPE, DRIVE } from '../../constants';
+import { DriveDirectory } from '../../../../interfaces';
+import { DIRECTORY_TYPE, DRIVE } from '../../../../constants';
 import API from '../api';
 
 export class BoxAPI extends API{
@@ -30,4 +30,20 @@ export class BoxAPI extends API{
             
         })
     }
+
+
+    public fetchNextPage (token: string, directoryID: string): Promise<DriveDirectory[]>{
+        return new Promise((resolve, reject) => {
+            // if(!this.nextpageToken) {
+            //     return;
+            // }
+          
+            // this.fetchSubDirectories(token, directoryID, this.nextpageToken)
+            //     .then((res: any) => {
+            //         this.nextpageToken = res.nextPageToken;
+            //         resolve(res);
+            //     })
+            //     .catch(e => reject(e));
+        })
+      }
 }

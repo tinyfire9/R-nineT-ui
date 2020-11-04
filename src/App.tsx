@@ -1,15 +1,14 @@
 import React from 'react';
-import { TransferView, StatusView } from './app/index';
 import { Route, Switch, BrowserRouter, Link } from 'react-router-dom';
-import '@blueprintjs/core/lib/css/blueprint.css';
-import './app.scss';
-
-import { BoxAPI } from '../src/service/box/api';
-import { DRIVE } from './constants';
-import DropboxAPI from './service/dropbox/api';
-import GDriveAPI from './service/gdrive/api';
 import { Navbar, Button, Alignment, Icon, Colors } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import '@blueprintjs/core/lib/css/blueprint.css';
+
+import API from './app/transfer/drives/api';
+import { TransferView, StatusView } from './app/index';
+import { config } from './app/transfer/drives'
+import { DRIVE } from './constants';
+import './app.scss';
 
 
 class RnineT extends React.Component<any, any> {
@@ -17,27 +16,30 @@ class RnineT extends React.Component<any, any> {
     let url = new URLSearchParams(window.location.search);
     if(url.has('auth-drive')){
       let drive = url.get('auth-drive') || '';
+      let driveConfig = config[drive];
+
+      if(driveConfig === null){
+        return; 
+      }
       
+      let api: API = driveConfig.dirSelector.api;
+
       switch(drive){
         case DRIVE.BOX.toLowerCase():{
-          let boxAPI: BoxAPI = new BoxAPI();
-          boxAPI.getAndStoreToken(url.get('code') || '');
+          api.getAndStoreToken(url.get('code') || '');
           break;
         }
-
         case DRIVE.DROPBOX.toLowerCase(): {
-          let dropboxAPI: DropboxAPI = new DropboxAPI();
-          dropboxAPI.getAndStoreToken(url.get('code') || '');
+          api.getAndStoreToken(url.get('code') || '');
           break;
         }
 
         case DRIVE.GOOGLE_DRIVE.toLowerCase():{
           url = new URLSearchParams('?' + window.location.hash.substr(1))
-          let gDriveAPI: GDriveAPI = new GDriveAPI();
           let accessToken = url.get('access_token') || '';
           let expiresIn = url.get('expires_in') || '';
 
-          gDriveAPI.storeToken({ accessToken, expiresIn });
+          api.storeToken({ accessToken, expiresIn });
           break;
         }
       }
